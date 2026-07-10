@@ -106,8 +106,93 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="py-6 border-t border-slate-900 text-center text-xs text-slate-500">
-        © 2026 ABC International School. All rights reserved.
+      <footer className="bg-slate-950/60 border-t border-slate-900/60 py-12 px-6 mt-12">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-left">
+          {/* Logo & Tagline */}
+          <div className="space-y-4 col-span-1 md:col-span-1">
+            <div className="flex items-center gap-3">
+              <svg
+                className="w-8 h-8 text-amber-500"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 8c0.5-1.5 2-2.5 4.5-2.5H19v7h-2.5c-2.5 0-4 1-4.5 2.5m0-7c-.5-1.5-2-2.5-4.5-2.5H5v7h2.5c2.5 0 4 1 4.5 2.5m0-7v7"
+                />
+              </svg>
+              <span className="flex flex-col leading-none text-left">
+                <span className="text-sm font-black tracking-wide text-white uppercase">ABC</span>
+                <span className="text-[8px] font-bold tracking-widest text-amber-500 uppercase mt-0.5">International</span>
+              </span>
+            </div>
+            <p className="text-xs text-slate-400 leading-relaxed max-w-xs">
+              Nurturing the leaders of tomorrow with rigorous academic values, creative problem solving, and modern world-class facilities.
+            </p>
+          </div>
+
+          {/* Quick Links: Programs */}
+          <div className="space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">Academic Programs</h4>
+            <ul className="space-y-2 text-xs text-slate-400">
+              <li><span className="hover:text-amber-500 transition-colors cursor-pointer">Primary Academy</span></li>
+              <li><span className="hover:text-amber-500 transition-colors cursor-pointer">Middle School</span></li>
+              <li><span className="hover:text-amber-500 transition-colors cursor-pointer">Senior Preparatory</span></li>
+              <li><span className="hover:text-amber-500 transition-colors cursor-pointer">Advanced Placement (AP)</span></li>
+            </ul>
+          </div>
+
+          {/* Quick Links: Portal */}
+          <div className="space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">Admission Portal</h4>
+            <ul className="space-y-2 text-xs text-slate-400">
+              <li><Link href="/register" className="hover:text-amber-500 transition-colors">Start Application</Link></li>
+              <li><Link href="/login" className="hover:text-amber-500 transition-colors">Portal Account Access</Link></li>
+              <li><span className="hover:text-amber-500 transition-colors cursor-pointer">Important Dates</span></li>
+              <li><span className="hover:text-amber-500 transition-colors cursor-pointer">Tuition & Scholarships</span></li>
+            </ul>
+          </div>
+
+          {/* Contact Details */}
+          <div className="space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">Contact Admissions</h4>
+            <ul className="space-y-2 text-xs text-slate-450">
+              <li className="flex items-center gap-2">
+                <span>📧</span>
+                <span className="hover:text-amber-500 transition-colors cursor-pointer text-slate-400">admissions@abc-school.edu</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <span>📞</span>
+                <span className="text-slate-400">+1 (555) 019-2834</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-0.5">📍</span>
+                <span className="leading-snug text-slate-400">100 Academy Blvd,<br />Suite 500, VA 22102</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto border-t border-slate-900 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <div>
+            © 2026 ABC International School. All rights reserved.
+          </div>
+          <div className="flex gap-4">
+            <span className="hover:text-slate-400 cursor-pointer">Privacy Policy</span>
+            <span>•</span>
+            <span className="hover:text-slate-400 cursor-pointer">Terms of Service</span>
+            <span>•</span>
+            <span className="hover:text-slate-400 cursor-pointer">Contact Support</span>
+          </div>
+        </div>
       </footer>
     </div>
   );
