@@ -99,6 +99,48 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
+
+        {/* Steps Section */}
+        <section className="max-w-7xl w-full mx-auto px-6 py-16 border-t border-slate-900/50 mt-12 space-y-10">
+          <div className="text-center space-y-3">
+            <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl text-white">
+              Application Pipeline Steps
+            </h2>
+            <p className="text-slate-400 text-sm max-w-lg mx-auto">
+              Review the 5 checkpoints to enroll a student in our academic courses.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+            {[
+              { step: '01', title: 'Register Account', desc: 'Create a parent profile account to begin the enrollment process.', icon: '🔑' },
+              { step: '02', title: 'Biographical Info', desc: 'Provide student name, age, previous school records, and grades.', icon: '📝' },
+              { step: '03', title: 'Verify Registration', desc: 'Pay the biographical processing and examination validation fee.', icon: '💳' },
+              { step: '04', title: 'Reserve Seat', desc: 'Select a suitable date/time and book a seating spot for the test.', icon: '📅' },
+              { step: '05', title: 'Course Placement', desc: 'Receive examination scores and course assignments from the staff.', icon: '🎓' },
+            ].map((item) => (
+              <div
+                key={item.step}
+                className="bg-slate-900/40 border border-slate-800/80 p-6 rounded-2xl flex flex-col justify-between shadow-lg space-y-4 hover:border-amber-500/30 transition-all duration-300 group"
+              >
+                <div className="space-y-3">
+                  <div className="flex justify-between items-start">
+                    <span className="text-3xl">{item.icon}</span>
+                    <span className="text-xs font-bold text-amber-500/80 tracking-widest bg-amber-500/5 border border-amber-500/10 px-2 py-0.5 rounded-full uppercase leading-none">
+                      Step {item.step}
+                    </span>
+                  </div>
+                  <h3 className="text-base font-bold text-white leading-snug group-hover:text-amber-500 transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
       </main>
 
       {/* Footer */}

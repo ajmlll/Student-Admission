@@ -1,10 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import Link from 'next/link';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   if (!user) return null;
 
@@ -70,7 +72,7 @@ export default function Navbar() {
 
         {/* Logout Trigger */}
         <button
-          onClick={logout}
+          onClick={() => setShowLogoutConfirm(true)}
           className="border border-red-500/20 hover:border-red-500/40 bg-red-500/5 hover:bg-red-500/10 text-red-400 font-bold text-xs uppercase tracking-wider transition-all p-2.5 sm:py-2 sm:px-4 rounded-full flex items-center justify-center gap-1.5 group/logout shadow-sm"
           title="Logout"
         >
@@ -97,6 +99,62 @@ export default function Navbar() {
           <span className="hidden sm:inline">Logout</span>
         </button>
       </div>
+
+      {/* Custom Logout Confirmation Modal */}
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 w-full max-w-sm shadow-2xl text-center space-y-5 animate-scale-in">
+            {/* Exit Icon */}
+            <div className="mx-auto w-12 h-12 bg-red-500/10 border border-red-500/20 text-red-500 rounded-full flex items-center justify-center">
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19 12H9m10 0l-3-3m3 3l-3 3"
+                />
+              </svg>
+            </div>
+            
+            <div className="space-y-2">
+              <h3 className="text-lg font-bold text-white">Confirm Logout</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Are you sure you want to log out of your school admission portal account?
+              </p>
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowLogoutConfirm(false)}
+                className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-2.5 px-4 rounded-xl text-xs transition-all border border-slate-700/50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowLogoutConfirm(false);
+                  logout();
+                }}
+                className="flex-1 bg-red-500 hover:bg-red-650 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all shadow-md shadow-red-500/10"
+              >
+                Yes, Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
