@@ -11,8 +11,10 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT') || 3001;
 
-  // Set global API prefix
-  app.setGlobalPrefix('api');
+  // Set global API prefix with root exclusion
+  app.setGlobalPrefix('api', {
+    exclude: ['/'],
+  });
 
   // Enable CORS
   app.enableCors({
