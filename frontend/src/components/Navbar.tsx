@@ -71,20 +71,27 @@ export default function Navbar() {
         {/* Logout Trigger */}
         <button
           onClick={logout}
-          className="border border-red-500/20 hover:border-red-500/40 bg-red-500/5 hover:bg-red-500/10 text-red-400 font-bold text-xs uppercase tracking-wider transition-all p-2 sm:py-2.5 sm:px-4.5 rounded-full flex items-center justify-center gap-1.5"
+          className="border border-red-500/20 hover:border-red-500/40 bg-red-500/5 hover:bg-red-500/10 text-red-400 font-bold text-xs uppercase tracking-wider transition-all p-2.5 sm:py-2 sm:px-4 rounded-full flex items-center justify-center gap-1.5 group/logout shadow-sm"
           title="Logout"
         >
           <svg
-            className="w-4 h-4 sm:hidden text-red-400"
+            className="w-4 h-4 text-red-400 group-hover/logout:translate-x-0.5 transition-transform duration-300"
             fill="none"
             stroke="currentColor"
-            strokeWidth={2.5}
+            strokeWidth={2.2}
             viewBox="0 0 24 24"
           >
+            {/* Door/bracket */}
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M5.636 5.636a9 9 0 1012.728 0M12 3v9"
+              d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15"
+            />
+            {/* Arrow pointing right */}
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19 12H9m10 0l-3-3m3 3l-3 3"
             />
           </svg>
           <span className="hidden sm:inline">Logout</span>
