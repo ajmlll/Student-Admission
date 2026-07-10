@@ -10,6 +10,6 @@ import { Student, StudentSchema } from './schemas/student.schema';
   ],
   controllers: [StudentsController],
   providers: [StudentsService],
-  exports: [StudentsService],
+  exports: [StudentsService, MongooseModule],
 })
 export class StudentsModule {}
