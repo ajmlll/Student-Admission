@@ -183,7 +183,7 @@ export default function StudentDetailsPage() {
       <div>
         <Link
           href="/parent/dashboard"
-          className="text-indigo-400 hover:text-indigo-300 text-sm font-medium transition-colors flex items-center gap-1.5"
+          className="text-amber-500 hover:text-amber-400 text-sm font-semibold transition-colors flex items-center gap-1.5"
         >
           <svg
             className="w-4 h-4"
@@ -194,21 +194,21 @@ export default function StudentDetailsPage() {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={2}
+              strokeWidth={2.5}
               d="M10 19l-7-7m0 0l7-7m-7 7h18"
             />
           </svg>
           Back to Dashboard
         </Link>
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-4">
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl font-black text-white tracking-tight">
             Application Workspace: {student.studentName}
           </h1>
           <span
             className={`px-3 py-1 text-xs font-semibold rounded-full capitalize ${
               student.status === 'ADMISSION_COMPLETED'
                 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'
+                : 'bg-amber-500/10 text-amber-450 border border-amber-500/20'
             }`}
           >
             {student.status.replace(/_/g, ' ')}
@@ -229,9 +229,9 @@ export default function StudentDetailsPage() {
         </h3>
         <div className="relative flex justify-between items-center w-full">
           {/* Connecting lines */}
-          <div className="absolute left-4 right-4 top-[18px] h-1 bg-slate-800 -z-10 rounded">
+          <div className="absolute left-4 right-4 top-[18px] h-[3px] bg-slate-800 -z-10 rounded">
             <div
-              className="h-full bg-indigo-500 rounded transition-all duration-500"
+              className="h-full bg-amber-500 rounded transition-all duration-500"
               style={{
                 width: `${(currentStepIdx / (STATUS_STEPS.length - 1)) * 100}%`,
               }}
@@ -247,10 +247,10 @@ export default function StudentDetailsPage() {
                 <div
                   className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
                     isCompleted
-                      ? 'bg-indigo-600 text-white'
+                      ? 'bg-amber-500 text-[#0B132B]'
                       : isCurrent
-                      ? 'bg-indigo-400 text-slate-950 ring-4 ring-indigo-500/20'
-                      : 'bg-slate-800 text-slate-400 border border-slate-700'
+                      ? 'bg-amber-500 text-[#0B132B] ring-4 ring-amber-500/20 scale-110'
+                      : 'bg-slate-855 text-slate-500 border border-slate-800'
                   }`}
                 >
                   {isCompleted ? (
@@ -263,7 +263,7 @@ export default function StudentDetailsPage() {
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth={3}
+                        strokeWidth={3.5}
                         d="M5 13l4 4L19 7"
                       />
                     </svg>
@@ -272,11 +272,11 @@ export default function StudentDetailsPage() {
                   )}
                 </div>
                 <span
-                  className={`text-[10px] sm:text-sm mt-3 font-medium text-center ${
+                  className={`text-[10px] sm:text-sm mt-3 font-semibold text-center ${
                     isCurrent
-                      ? 'text-indigo-400 font-semibold'
+                      ? 'text-amber-500 font-bold'
                       : isCompleted
-                      ? 'text-slate-350'
+                      ? 'text-slate-300'
                       : 'text-slate-500'
                   }`}
                 >
@@ -368,10 +368,10 @@ export default function StudentDetailsPage() {
                 >
                   Cancel
                 </button>
-                <button
+                 <button
                   type="submit"
                   disabled={editLoading}
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-1 px-3 rounded text-xs disabled:opacity-50"
+                  className="bg-amber-500 hover:bg-amber-600 text-[#0B132B] font-bold py-1 px-3 rounded text-xs disabled:opacity-50"
                 >
                   Save
                 </button>
@@ -426,7 +426,7 @@ export default function StudentDetailsPage() {
               <div className="pt-2">
                 <button
                   onClick={handlePayFee}
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 px-6 rounded-lg shadow-md transition-colors"
+                  className="bg-amber-500 hover:bg-amber-600 text-[#0B132B] font-bold py-2.5 px-6 rounded-lg shadow-lg shadow-amber-500/10 transition-all text-sm"
                 >
                   Pay Registration Fee ($100)
                 </button>
@@ -437,7 +437,7 @@ export default function StudentDetailsPage() {
           {/* Stage B: Slot Selection */}
           {student.status === 'REGISTRATION_FEE_PAID' && (
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-md space-y-6">
-              <div className="w-12 h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-full flex items-center justify-center text-indigo-400 text-lg">
+              <div className="w-12 h-12 bg-amber-500/10 border border-amber-500/20 rounded-full flex items-center justify-center text-amber-400 text-lg">
                 📅
               </div>
               <div>
@@ -466,8 +466,8 @@ export default function StudentDetailsPage() {
                         onClick={() => setSelectedSlotId(slot.id)}
                         className={`p-4 rounded-xl text-left border transition-all ${
                           isSelected
-                            ? 'bg-indigo-600/10 border-indigo-500'
-                            : 'bg-slate-800/40 border-slate-800 hover:border-slate-700'
+                            ? 'bg-amber-500/10 border-amber-500'
+                            : 'bg-slate-855 border-slate-800 hover:border-slate-700'
                         }`}
                       >
                         <div className="text-sm font-bold text-white">
@@ -485,8 +485,8 @@ export default function StudentDetailsPage() {
                           <span
                             className={`text-[10px] px-2 py-0.5 rounded font-semibold ${
                               isSelected
-                                ? 'bg-indigo-500/20 text-indigo-300'
-                                : 'bg-slate-700 text-slate-350'
+                                ? 'bg-amber-500/25 text-amber-450 border border-amber-500/10'
+                                : 'bg-slate-800 text-slate-400 border border-slate-700'
                             }`}
                           >
                             Selected
@@ -503,7 +503,7 @@ export default function StudentDetailsPage() {
                   <button
                     onClick={handleBookSlot}
                     disabled={!selectedSlotId || bookingLoading}
-                    className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-medium py-2.5 px-6 rounded-lg transition-colors shadow-md"
+                    className="bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-[#0B132B] font-bold py-2.5 px-6 rounded-lg transition-colors shadow-lg shadow-amber-500/10 text-sm"
                   >
                     {bookingLoading ? 'Confirming Reservation...' : 'Book Selected Slot'}
                   </button>

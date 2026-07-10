@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { fetchCompletedAdmissions } from '../../../../lib/api/admission';
 import { Student } from '../../../../lib/api/students';
 
-export default function CompletedAdmissionsPage() {
-  const [admissions, setAdmissions] = useState<Student[]>([]);
+export default function CompletedAdmissions() {
+  const [completed, setCompleted] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,9 +14,9 @@ export default function CompletedAdmissionsPage() {
     async function loadData() {
       try {
         const data = await fetchCompletedAdmissions();
-        setAdmissions(data);
+        setCompleted(data);
       } catch (err: any) {
-        setError(err.message || 'Failed to load completed admissions');
+        setError(err.message || 'Failed to load completed roster');
       } finally {
         setLoading(false);
       }
@@ -24,12 +24,22 @@ export default function CompletedAdmissionsPage() {
     loadData();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center">
+        <div className="text-lg text-amber-500 animate-pulse font-medium">
+          Loading student roster...
+        </div>
+      </div>
+    );
+  }
+
   return (
     <main className="max-w-7xl w-full mx-auto px-6 py-8 animate-fade-in space-y-6">
       <div>
         <Link
           href="/admission/dashboard"
-          className="text-indigo-400 hover:text-indigo-300 text-sm font-medium transition-colors flex items-center gap-1.5"
+          className="text-amber-500 hover:text-amber-400 text-sm font-semibold transition-colors flex items-center gap-1.5"
         >
           <svg
             className="w-4 h-4"
@@ -40,17 +50,17 @@ export default function CompletedAdmissionsPage() {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={2}
+              strokeWidth={2.5}
               d="M10 19l-7-7m0 0l7-7m-7 7h18"
             />
           </svg>
-          Back to Dashboard
+          Back to Workspace
         </Link>
-        <h1 className="text-3xl font-extrabold tracking-tight text-white mt-4">
-          Completed Admissions
+        <h1 className="text-3xl font-black text-white mt-4 tracking-tight">
+          Completed Admissions Roster
         </h1>
-        <p className="text-slate-400 mt-1">
-          Archived list of students who have completed all admission, examination, and placement checks.
+        <p className="text-slate-400 mt-1 text-sm">
+          Roster of students who have completed the admissions pipeline and been assigned classrooms.
         </p>
       </div>
 
@@ -60,57 +70,95 @@ export default function CompletedAdmissionsPage() {
         </div>
       )}
 
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
-        {loading ? (
-          <div className="text-center py-16 text-slate-500 animate-pulse">
-            Loading completed roster...
-          </div>
-        ) : admissions.length === 0 ? (
-          <div className="text-center py-16 text-slate-450">
-            No completed admissions are recorded in the system yet.
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-slate-800 text-xs font-bold uppercase text-slate-400 bg-slate-950/20">
-                  <th className="py-4 px-6">Student Name</th>
-                  <th className="py-4 px-6">Grade Applied</th>
-                  <th className="py-4 px-6">Exam Score</th>
-                  <th className="py-4 px-6">Assigned Course</th>
-                  <th className="py-4 px-6">Enrollment Date</th>
+      {/* Table Container (Responsive Scroll) */}
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden">
+        <div className="overflow-x-auto w-full">
+          <table className="min-w-full divide-y divide-slate-800">
+            <thead className="bg-slate-950/40">
+              <tr>
+                <th
+                  scope="col"
+                  className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider"
+                >
+                  Student Name
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider"
+                >
+                  Target Grade
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider"
+                >
+                  Exam Score
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider"
+                >
+                  Assigned Placement
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-4 text-right text-xs font-bold text-slate-400 uppercase tracking-wider"
+                >
+                  Admitted At
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-800 bg-slate-900/10">
+              {completed.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={5}
+                    className="px-6 py-12 text-center text-sm text-slate-500"
+                  >
+                    No students have finalized registration yet.
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-800/60 text-sm">
-                {admissions.map((student) => (
+              ) : (
+                completed.map((student) => (
                   <tr
                     key={student.id}
-                    className="hover:bg-slate-800/10 transition-colors"
+                    className="hover:bg-slate-850/30 transition-colors"
                   >
-                    <td className="py-4 px-6 font-bold text-white">
-                      {student.studentName}
+                    <td className="px-6 py-4.5 whitespace-nowrap">
+                      <div className="text-sm font-bold text-white">
+                        {student.studentName}
+                      </div>
+                      <div className="text-xs text-slate-450 mt-0.5">
+                        DOB: {new Date(student.dateOfBirth).toLocaleDateString()}
+                      </div>
                     </td>
-                    <td className="py-4 px-6 text-slate-300">
-                      {student.applyingGrade}
+                    <td className="px-6 py-4.5 whitespace-nowrap">
+                      <span className="text-sm text-slate-300">
+                        {student.applyingGrade}
+                      </span>
                     </td>
-                    <td className="py-4 px-6 text-slate-350">
-                      <span className="font-semibold text-white">
+                    <td className="px-6 py-4.5 whitespace-nowrap font-semibold">
+                      <span className="text-sm text-amber-500 font-bold">
                         {student.examScore}
-                      </span>{' '}
-                      / 100
+                      </span>
+                      <span className="text-xs text-slate-500"> / 100</span>
                     </td>
-                    <td className="py-4 px-6 text-indigo-400 font-semibold">
-                      {student.assignedCourse}
+                    <td className="px-6 py-4.5 whitespace-nowrap">
+                      <span className="inline-block bg-emerald-500/10 text-emerald-450 border border-emerald-500/20 text-xs font-bold px-2.5 py-1 rounded-full">
+                        {student.assignedCourse}
+                      </span>
                     </td>
-                    <td className="py-4 px-6 text-slate-450">
-                      {new Date(student.updatedAt).toLocaleDateString()}
+                    <td className="px-6 py-4.5 whitespace-nowrap text-right text-xs text-slate-450">
+                      {student.updatedAt
+                        ? new Date(student.updatedAt).toLocaleString()
+                        : 'N/A'}
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </main>
   );

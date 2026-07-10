@@ -20,7 +20,6 @@ export default function LoginPage() {
 
     let isValid = true;
 
-    // Client-side validations
     if (!email) {
       setEmailError('Email address is required');
       isValid = false;
@@ -47,20 +46,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8 bg-slate-900/50 backdrop-blur-md p-8 rounded-2xl border border-slate-800 shadow-xl">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold tracking-tight text-white">
-            Sign in to your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-slate-400">
-            Or{' '}
-            <Link
-              href="/register"
-              className="font-medium text-indigo-400 hover:text-indigo-300 transition-colors"
-            >
-              create a new parent account
-            </Link>
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-tr from-[#0B132B] via-slate-950 to-[#1C2541] px-4 py-12 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8 bg-slate-900/40 backdrop-blur-md p-8 rounded-2xl border border-slate-800/80 shadow-2xl">
+        <div className="text-center">
+          <span className="text-4xl">🍁</span>
+          <h1 className="mt-4 text-3xl font-black tracking-tight text-white">
+            Maplewood <span className="text-amber-500 font-medium">International</span>
+          </h1>
+          <p className="mt-2 text-sm text-slate-400">
+            Sign in to your school admission account
           </p>
         </div>
 
@@ -71,13 +65,13 @@ export default function LoginPage() {
         )}
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit} noValidate>
-          <div className="space-y-4 rounded-md shadow-sm">
+          <div className="space-y-4">
             <div>
               <label
                 htmlFor="email-address"
-                className="block text-sm font-medium text-slate-300"
+                className="block text-xs font-semibold text-slate-400 uppercase tracking-wider"
               >
-                Email address
+                Email Address
               </label>
               <input
                 id="email-address"
@@ -86,19 +80,19 @@ export default function LoginPage() {
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={`mt-1 block w-full px-3 py-2 bg-slate-800 border ${
-                  emailError ? 'border-red-500' : 'border-slate-700'
-                } rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all sm:text-sm`}
+                className={`mt-1.5 block w-full px-3.5 py-2.5 bg-slate-850 border ${
+                  emailError ? 'border-red-500' : 'border-slate-800 focus:border-amber-500/50'
+                } rounded-lg text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all sm:text-sm`}
                 placeholder="you@example.com"
               />
               {emailError && (
-                <p className="mt-1 text-xs text-red-400">{emailError}</p>
+                <p className="mt-1.5 text-xs text-red-400">{emailError}</p>
               )}
             </div>
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-slate-300"
+                className="block text-xs font-semibold text-slate-400 uppercase tracking-wider"
               >
                 Password
               </label>
@@ -109,13 +103,13 @@ export default function LoginPage() {
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className={`mt-1 block w-full px-3 py-2 bg-slate-800 border ${
-                  passwordError ? 'border-red-500' : 'border-slate-700'
-                } rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all sm:text-sm`}
+                className={`mt-1.5 block w-full px-3.5 py-2.5 bg-slate-850 border ${
+                  passwordError ? 'border-red-500' : 'border-slate-800 focus:border-amber-500/50'
+                } rounded-lg text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all sm:text-sm`}
                 placeholder="••••••••"
               />
               {passwordError && (
-                <p className="mt-1 text-xs text-red-400">{passwordError}</p>
+                <p className="mt-1.5 text-xs text-red-400">{passwordError}</p>
               )}
             </div>
           </div>
@@ -124,12 +118,31 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative flex w-full justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 transition-all shadow-md"
+              className="group relative flex w-full justify-center rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-bold text-[#0B132B] hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:opacity-50 transition-all shadow-lg shadow-amber-500/20"
             >
-              {loading ? 'Signing in...' : 'Sign in'}
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-[#0B132B] border-t-transparent rounded-full animate-spin"></div>
+                  <span>Signing in...</span>
+                </div>
+              ) : (
+                'Sign In'
+              )}
             </button>
           </div>
         </form>
+
+        <div className="text-center pt-2">
+          <p className="text-sm text-slate-450">
+            Don't have an account?{' '}
+            <Link
+              href="/register"
+              className="font-medium text-amber-550 hover:text-amber-450 transition-colors underline"
+            >
+              Sign up
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

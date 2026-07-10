@@ -83,11 +83,11 @@ export default function NewStudentPage() {
   };
 
   return (
-    <main className="max-w-3xl w-full mx-auto px-6 py-8 animate-fade-in">
-      <div className="mb-6">
+    <main className="max-w-3xl w-full mx-auto px-6 py-8 animate-fade-in space-y-6">
+      <div>
         <Link
           href="/parent/dashboard"
-          className="text-indigo-400 hover:text-indigo-300 text-sm font-medium transition-colors flex items-center gap-1.5"
+          className="text-amber-500 hover:text-amber-400 text-sm font-semibold transition-colors flex items-center gap-1.5"
         >
           <svg
             className="w-4 h-4"
@@ -98,163 +98,172 @@ export default function NewStudentPage() {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={2}
+              strokeWidth={2.5}
               d="M10 19l-7-7m0 0l7-7m-7 7h18"
             />
           </svg>
           Back to Dashboard
         </Link>
-        <h1 className="text-3xl font-extrabold text-white mt-4 tracking-tight">
+        <h1 className="text-3xl font-black text-white mt-4 tracking-tight">
           Create Student Application
         </h1>
-        <p className="text-slate-400 mt-1">
+        <p className="text-slate-400 mt-1 text-sm">
           Provide your child's biographical and academic details to start.
         </p>
       </div>
 
       {error && (
-        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl mb-6 text-sm">
+        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl text-sm">
           {error}
         </div>
       )}
 
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-xl">
         <form onSubmit={handleSubmit} noValidate className="space-y-6">
-          {/* Student Name */}
-          <div>
-            <label
-              htmlFor="studentName"
-              className="block text-sm font-medium text-slate-300"
-            >
-              Student's Full Name
-            </label>
-            <input
-              id="studentName"
-              type="text"
-              value={studentName}
-              onChange={(e) => setStudentName(e.target.value)}
-              className={`mt-1.5 block w-full px-3.5 py-2.5 bg-slate-800 border ${
-                nameError ? 'border-red-500' : 'border-slate-700'
-              } rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all`}
-              placeholder="e.g. Alice Doe"
-            />
-            {nameError && (
-              <p className="mt-1.5 text-xs text-red-400">{nameError}</p>
-            )}
-          </div>
-
-          {/* DOB & Gender */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Section: Biographical Info */}
+          <div className="space-y-6">
             <div>
               <label
-                htmlFor="dob"
-                className="block text-sm font-medium text-slate-300"
+                htmlFor="studentName"
+                className="block text-xs font-semibold text-slate-400 uppercase tracking-wider"
               >
-                Date of Birth
+                Student's Full Name
               </label>
               <input
-                id="dob"
-                type="date"
-                value={dateOfBirth}
-                onChange={(e) => setDateOfBirth(e.target.value)}
-                className={`mt-1.5 block w-full px-3.5 py-2.5 bg-slate-800 border ${
-                  dobError ? 'border-red-500' : 'border-slate-700'
-                } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all`}
+                id="studentName"
+                type="text"
+                value={studentName}
+                onChange={(e) => setStudentName(e.target.value)}
+                className={`mt-1.5 block w-full px-3.5 py-2.5 bg-slate-850 border ${
+                  nameError ? 'border-red-500' : 'border-slate-800 focus:border-amber-500/50'
+                } rounded-lg text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all sm:text-sm`}
+                placeholder="e.g. Alice Doe"
               />
-              {dobError && (
-                <p className="mt-1.5 text-xs text-red-400">{dobError}</p>
+              {nameError && (
+                <p className="mt-1.5 text-xs text-red-400">{nameError}</p>
               )}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label
+                  htmlFor="dob"
+                  className="block text-xs font-semibold text-slate-400 uppercase tracking-wider"
+                >
+                  Date of Birth
+                </label>
+                <input
+                  id="dob"
+                  type="date"
+                  value={dateOfBirth}
+                  onChange={(e) => setDateOfBirth(e.target.value)}
+                  className={`mt-1.5 block w-full px-3.5 py-2.5 bg-slate-855 border ${
+                    dobError ? 'border-red-500' : 'border-slate-800 focus:border-amber-500/50'
+                  } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all sm:text-sm`}
+                />
+                {dobError && (
+                  <p className="mt-1.5 text-xs text-red-400">{dobError}</p>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="gender"
+                  className="block text-xs font-semibold text-slate-400 uppercase tracking-wider"
+                >
+                  Gender
+                </label>
+                <select
+                  id="gender"
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value as any)}
+                  className={`mt-1.5 block w-full px-3.5 py-2.5 bg-slate-855 border ${
+                    genderError ? 'border-red-500' : 'border-slate-800 focus:border-amber-500/50'
+                  } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all sm:text-sm`}
+                >
+                  <option value="" disabled className="text-slate-500">
+                    Select gender
+                  </option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+                {genderError && (
+                  <p className="mt-1.5 text-xs text-red-400">{genderError}</p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Section: Academic History */}
+          <div className="pt-6 border-t border-slate-850 space-y-6">
+            <div>
+              <label
+                htmlFor="previousSchool"
+                className="block text-xs font-semibold text-slate-400 uppercase tracking-wider"
+              >
+                Previous School (Optional)
+              </label>
+              <input
+                id="previousSchool"
+                type="text"
+                value={previousSchool}
+                onChange={(e) => setPreviousSchool(e.target.value)}
+                className="mt-1.5 block w-full px-3.5 py-2.5 bg-slate-855 border border-slate-800 focus:border-amber-500/50 rounded-lg text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all sm:text-sm"
+                placeholder="e.g. Greenfield Primary School"
+              />
             </div>
 
             <div>
               <label
-                htmlFor="gender"
-                className="block text-sm font-medium text-slate-300"
+                htmlFor="applyingGrade"
+                className="block text-xs font-semibold text-slate-400 uppercase tracking-wider"
               >
-                Gender
+                Applying Grade Level
               </label>
               <select
-                id="gender"
-                value={gender}
-                onChange={(e) => setGender(e.target.value as any)}
-                className={`mt-1.5 block w-full px-3.5 py-2.5 bg-slate-800 border ${
-                  genderError ? 'border-red-500' : 'border-slate-700'
-                } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all`}
+                id="applyingGrade"
+                value={applyingGrade}
+                onChange={(e) => setApplyingGrade(e.target.value as any)}
+                className={`mt-1.5 block w-full px-3.5 py-2.5 bg-slate-855 border ${
+                  gradeError ? 'border-red-500' : 'border-slate-800 focus:border-amber-500/50'
+                } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all sm:text-sm`}
               >
                 <option value="" disabled className="text-slate-500">
-                  Select gender
+                  Select grade
                 </option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
+                <option value="Grade 1">Grade 1</option>
+                <option value="Grade 2">Grade 2</option>
+                <option value="Grade 3">Grade 3</option>
+                <option value="Grade 4">Grade 4</option>
               </select>
-              {genderError && (
-                <p className="mt-1.5 text-xs text-red-400">{genderError}</p>
+              {gradeError && (
+                <p className="mt-1.5 text-xs text-red-400">{gradeError}</p>
               )}
             </div>
           </div>
 
-          {/* Previous School */}
-          <div>
-            <label
-              htmlFor="previousSchool"
-              className="block text-sm font-medium text-slate-300"
-            >
-              Previous School (Optional)
-            </label>
-            <input
-              id="previousSchool"
-              type="text"
-              value={previousSchool}
-              onChange={(e) => setPreviousSchool(e.target.value)}
-              className="mt-1.5 block w-full px-3.5 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-              placeholder="e.g. Greenfield Primary School"
-            />
-          </div>
-
-          {/* Applying Grade */}
-          <div>
-            <label
-              htmlFor="applyingGrade"
-              className="block text-sm font-medium text-slate-300"
-            >
-              Applying Grade
-            </label>
-            <select
-              id="applyingGrade"
-              value={applyingGrade}
-              onChange={(e) => setApplyingGrade(e.target.value as any)}
-              className={`mt-1.5 block w-full px-3.5 py-2.5 bg-slate-800 border ${
-                gradeError ? 'border-red-500' : 'border-slate-700'
-              } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all`}
-            >
-              <option value="" disabled className="text-slate-500">
-                Select grade
-              </option>
-              <option value="Grade 1">Grade 1</option>
-              <option value="Grade 2">Grade 2</option>
-              <option value="Grade 3">Grade 3</option>
-              <option value="Grade 4">Grade 4</option>
-            </select>
-            {gradeError && (
-              <p className="mt-1.5 text-xs text-red-400">{gradeError}</p>
-            )}
-          </div>
-
-          {/* Actions */}
-          <div className="flex items-center justify-end gap-4 pt-4 border-t border-slate-800">
+          {/* Form Actions */}
+          <div className="flex items-center justify-end gap-4 pt-6 border-t border-slate-850">
             <Link
               href="/parent/dashboard"
-              className="text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors"
+              className="text-slate-400 hover:text-slate-200 text-sm font-semibold transition-colors"
             >
               Cancel
             </Link>
             <button
               type="submit"
               disabled={loading}
-              className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 px-6 rounded-lg shadow-md transition-colors disabled:opacity-50 flex items-center gap-2"
+              className="bg-amber-500 hover:bg-amber-600 text-[#0B132B] font-bold py-2.5 px-6 rounded-lg shadow-lg shadow-amber-500/10 transition-all disabled:opacity-50 flex items-center gap-2 text-sm"
             >
-              {loading ? 'Submitting Application...' : 'Create Application'}
+              {loading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-[#0B132B] border-t-transparent rounded-full animate-spin"></div>
+                  <span>Creating application...</span>
+                </>
+              ) : (
+                'Create Application'
+              )}
             </button>
           </div>
         </form>
