@@ -99,8 +99,9 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
+      </main>
 
-        {/* Steps Section */}
+      {/* Steps Section */}
         <section className="w-full px-6 lg:px-12 py-16 border-t border-slate-900/50 mt-12 space-y-10">
           <div className="text-center space-y-3">
             <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl text-white">
@@ -141,7 +142,6 @@ export default function HomePage() {
             ))}
           </div>
         </section>
-      </main>
 
       {/* Footer */}
       <footer className="bg-slate-950/60 border-t border-slate-900/60 py-12 px-6 mt-12">
