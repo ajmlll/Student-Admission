@@ -48,10 +48,10 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-tr from-[#0B132B] via-slate-950 to-[#1C2541] px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8 bg-slate-900/40 backdrop-blur-md p-8 rounded-2xl border border-slate-800/80 shadow-2xl">
-        <div className="text-center">
-          <span className="text-4xl">🍁</span>
-          <h1 className="mt-4 text-3xl font-black tracking-tight text-white">
-            Maplewood <span className="text-amber-500 font-medium">International</span>
+        <div className="text-center flex flex-col items-center">
+          <span className="text-amber-500 text-5xl font-serif leading-none">A</span>
+          <h1 className="mt-2 text-2xl font-black tracking-wider text-white uppercase">
+            ABC <span className="text-amber-500 font-medium">International</span>
           </h1>
           <p className="mt-2 text-sm text-slate-400">
             Sign in to your school admission account

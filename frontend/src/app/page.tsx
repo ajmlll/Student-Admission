@@ -33,8 +33,12 @@ export default function HomePage() {
     <div className="flex min-h-screen flex-col bg-gradient-to-tr from-[#0B132B] via-slate-950 to-[#1C2541] text-white">
       {/* Header bar */}
       <header className="px-6 py-5 border-b border-slate-900 flex justify-between items-center max-w-7xl w-full mx-auto">
-        <span className="text-xl font-black tracking-tight text-white flex items-center gap-2">
-          <span className="text-amber-500">🍁</span> Maplewood <span className="text-amber-500 font-normal">International</span>
+        <span className="text-xl font-black tracking-tight text-white flex items-center gap-2.5">
+          <span className="text-amber-500 text-2xl font-serif">A</span>
+          <span className="flex flex-col leading-none text-left">
+            <span className="text-base font-black tracking-wide text-white uppercase">ABC</span>
+            <span className="text-[9px] font-bold tracking-widest text-amber-500 uppercase mt-0.5">International School</span>
+          </span>
         </span>
         <div className="flex gap-4">
           <Link
@@ -65,7 +69,7 @@ export default function HomePage() {
             </span>
           </h1>
           <p className="max-w-xl mx-auto text-base text-slate-400 leading-relaxed">
-            Welcome to Maplewood International School's Admission Portal. Apply for new student registrations, track evaluation steps, and schedule examinations.
+            Welcome to ABC International School's Admission Portal. Apply for new student registrations, track evaluation steps, and schedule examinations.
           </p>
           <div className="mt-8 pt-4 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -86,7 +90,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="py-6 border-t border-slate-900 text-center text-xs text-slate-500">
-        © 2026 Maplewood International School. All rights reserved.
+        © 2026 ABC International School. All rights reserved.
       </footer>
     </div>
   );
