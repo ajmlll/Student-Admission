@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { fetchAdmissionApplications } from '../../../../lib/api/admission';
 import { Student } from '../../../../lib/api/students';
+import LoadingScreen from '../../../../components/LoadingScreen';
 
 const STATUS_STEPS = [
   { key: 'ALL', label: 'All Files' },
@@ -40,13 +41,7 @@ export default function ApplicationsPipeline() {
       : applications.filter((app) => app.status === activeTab);
 
   if (loading) {
-    return (
-      <div className="flex min-h-[50vh] items-center justify-center">
-        <div className="text-lg text-amber-500 animate-pulse font-medium">
-          Loading pipeline...
-        </div>
-      </div>
-    );
+    return <LoadingScreen message="Loading pipeline applications..." fullScreen={false} />;
   }
 
   return (

@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '../context/AuthContext';
 
+import LoadingScreen from '../components/LoadingScreen';
+
 export default function HomePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -20,13 +22,7 @@ export default function HomePage() {
   }, [user, loading, router]);
 
   if (loading || user) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-tr from-[#0B132B] via-slate-950 to-[#1C2541]">
-        <div className="text-xl text-amber-500 font-medium animate-pulse">
-          Loading portal session...
-        </div>
-      </div>
-    );
+    return <LoadingScreen message="Loading portal session..." fullScreen={true} />;
   }
 
   return (

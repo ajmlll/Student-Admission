@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { fetchAdmissionApplications } from '../../../../lib/api/admission';
 import { Student } from '../../../../lib/api/students';
+import LoadingScreen from '../../../../components/LoadingScreen';
 
 export default function AdmissionDashboard() {
   const [applications, setApplications] = useState<Student[]>([]);
@@ -41,13 +42,7 @@ export default function AdmissionDashboard() {
   };
 
   if (loading) {
-    return (
-      <div className="flex min-h-[50vh] items-center justify-center">
-        <div className="text-lg text-amber-500 animate-pulse font-medium">
-          Loading metrics...
-        </div>
-      </div>
-    );
+    return <LoadingScreen message="Loading metrics..." fullScreen={false} />;
   }
 
   return (

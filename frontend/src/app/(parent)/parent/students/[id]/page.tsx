@@ -10,6 +10,7 @@ import {
   Student,
 } from '../../../../../lib/api/students';
 import { fetchExamSlots, bookExamSlot, ExamSlot } from '../../../../../lib/api/examSlots';
+import LoadingScreen from '../../../../../components/LoadingScreen';
 
 const STATUS_STEPS = [
   { key: 'APPLICATION_CREATED', label: 'Applied' },
@@ -149,13 +150,7 @@ export default function StudentDetailsPage() {
   };
 
   if (loading) {
-    return (
-      <div className="flex min-h-[50vh] items-center justify-center">
-        <div className="text-lg text-indigo-400 animate-pulse">
-          Loading application workspace...
-        </div>
-      </div>
-    );
+    return <LoadingScreen message="Loading application workspace..." fullScreen={false} />;
   }
 
   if (!student) {

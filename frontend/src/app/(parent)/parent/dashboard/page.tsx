@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { fetchStudents, Student } from '../../../../lib/api/students';
 import { fetchExamSlots, ExamSlot } from '../../../../lib/api/examSlots';
+import LoadingScreen from '../../../../components/LoadingScreen';
 
 const STATUS_STEPS = [
   { key: 'APPLICATION_CREATED', label: 'Applied' },
@@ -61,13 +62,7 @@ export default function ParentDashboard() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex min-h-[50vh] items-center justify-center">
-        <div className="text-lg text-amber-500 animate-pulse font-medium">
-          Loading student dashboard...
-        </div>
-      </div>
-    );
+    return <LoadingScreen message="Loading student dashboard..." fullScreen={false} />;
   }
 
   // Count Calculations
