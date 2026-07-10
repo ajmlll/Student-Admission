@@ -101,7 +101,7 @@ export default function HomePage() {
         </div>
 
         {/* Steps Section */}
-        <section className="max-w-7xl w-full mx-auto px-6 py-16 border-t border-slate-900/50 mt-12 space-y-10">
+        <section className="w-full px-6 lg:px-12 py-16 border-t border-slate-900/50 mt-12 space-y-10">
           <div className="text-center space-y-3">
             <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl text-white">
               Application Pipeline Steps
