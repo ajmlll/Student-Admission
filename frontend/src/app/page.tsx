@@ -111,7 +111,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {[
               { step: '01', title: 'Register Account', desc: 'Create a parent profile account to begin the enrollment process.', icon: '🔑' },
               { step: '02', title: 'Biographical Info', desc: 'Provide student name, age, previous school records, and grades.', icon: '📝' },
@@ -121,7 +121,7 @@ export default function HomePage() {
             ].map((item) => (
               <div
                 key={item.step}
-                className="bg-slate-900/40 border border-slate-800/80 p-6 rounded-2xl flex flex-col justify-between shadow-lg space-y-4 hover:border-amber-500/30 transition-all duration-300 group"
+                className="bg-slate-900/40 border border-slate-800/80 p-6 rounded-2xl flex flex-col justify-between shadow-lg space-y-4 hover:border-amber-500/30 transition-all duration-300 group h-full"
               >
                 <div className="space-y-3">
                   <div className="flex justify-between items-start">

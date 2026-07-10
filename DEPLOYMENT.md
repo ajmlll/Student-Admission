@@ -45,7 +45,7 @@ Render is ideal for hosting NestJS service runtimes:
    Click **Advanced** or navigate to the **Variables** tab on your Render dashboard, and add:
    - `MONGO_URI`: *Your MongoDB Atlas connection string from Phase 1.*
    - `JWT_SECRET`: *A secure random string (e.g., `45f8a0bdc6e2...`).*
-   - `PORT`: `10000` (Render will map this automatically, but setting it explicitly is recommended).
+   - `PORT`: `10000` (Render will map this automatically, but setting it explicitly is recommended).![alt text](image.png)
 5. **Deploy**:
    - Render will build and deploy the NestJS API.
    - Once successfully deployed, Render will provide a public URL like:
