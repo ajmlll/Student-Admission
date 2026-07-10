@@ -123,4 +123,44 @@ export class ExamSlotsService {
 
     return updatedSlot;
   }
+
+  async remove(id: string): Promise<void> {
+    const slot = await this.examSlotModel.findById(id).exec();
+    if (!slot) {
+      throw new NotFoundException(`Exam slot with ID "${id}" not found`);
+    }
+    if (slot.isBooked) {
+      throw new BadRequestException(
+        'Cannot delete a slot that has already been booked by a student.',
+      );
+    }
+    await this.examSlotModel.deleteOne({ _id: id }).exec();
+  }
+
+  async update(
+    id: string,
+    updateDto: Partial<CreateExamSlotDto>,
+  ): Promise<ExamSlotDocument> {
+    const slot = await this.examSlotModel.findById(id).exec();
+    if (!slot) {
+      throw new NotFoundException(`Exam slot with ID "${id}" not found`);
+    }
+    if (slot.isBooked) {
+      throw new BadRequestException(
+        'Cannot edit a slot that has already been booked by a student.',
+      );
+    }
+
+    if (updateDto.date !== undefined) {
+      slot.date = new Date(updateDto.date);
+    }
+    if (updateDto.time !== undefined) {
+      slot.time = updateDto.time;
+    }
+    if (updateDto.capacity !== undefined) {
+      slot.capacity = updateDto.capacity;
+    }
+
+    return slot.save();
+  }
 }

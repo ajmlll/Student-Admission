@@ -2,6 +2,8 @@ import {
   Controller,
   Get,
   Post,
+  Patch,
+  Delete,
   Body,
   Param,
   Query,
@@ -84,5 +86,29 @@ export class ExamSlotsController {
     @CurrentUser() user: any,
   ) {
     return this.examSlotsService.bookSlot(id, bookDto.studentId, user);
+  }
+
+  @Patch(':id')
+  @Roles('admission_team')
+  @ApiOperation({ summary: 'Edit an entrance exam slot (Staff only)' })
+  @ApiResponse({ status: 200, description: 'Exam slot updated successfully.' })
+  @ApiResponse({ status: 400, description: 'Validation error or slot is already booked.' })
+  @ApiResponse({ status: 404, description: 'Slot not found.' })
+  async update(
+    @Param('id') id: string,
+    @Body() updateDto: Partial<CreateExamSlotDto>,
+  ) {
+    return this.examSlotsService.update(id, updateDto);
+  }
+
+  @Delete(':id')
+  @Roles('admission_team')
+  @ApiOperation({ summary: 'Delete an entrance exam slot (Staff only)' })
+  @ApiResponse({ status: 200, description: 'Exam slot deleted successfully.' })
+  @ApiResponse({ status: 400, description: 'Slot is already booked.' })
+  @ApiResponse({ status: 404, description: 'Slot not found.' })
+  async remove(@Param('id') id: string) {
+    await this.examSlotsService.remove(id);
+    return { success: true };
   }
 }

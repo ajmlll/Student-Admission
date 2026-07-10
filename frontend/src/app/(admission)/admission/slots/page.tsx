@@ -2,13 +2,22 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { fetchExamSlots, createExamSlot, ExamSlot } from '../../../../lib/api/examSlots';
+import {
+  fetchExamSlots,
+  createExamSlot,
+  deleteExamSlot,
+  updateExamSlot,
+  ExamSlot,
+} from '../../../../lib/api/examSlots';
 
 export default function ConfigureSlotsPage() {
   const [slots, setSlots] = useState<ExamSlot[]>([]);
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [capacity, setCapacity] = useState('1');
+
+  // Edit states
+  const [editingSlotId, setEditingSlotId] = useState<string | null>(null);
 
   const [dateError, setDateError] = useState<string | null>(null);
   const [timeError, setTimeError] = useState<string | null>(null);
@@ -51,7 +60,7 @@ export default function ConfigureSlotsPage() {
       const selectedDate = new Date(date);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      if (selectedDate < today) {
+      if (selectedDate < today && !editingSlotId) {
         setDateError('Exam date cannot be in the past');
         isValid = false;
       }
@@ -63,7 +72,12 @@ export default function ConfigureSlotsPage() {
     }
 
     const capNum = Number(capacity);
-    if (!capacity.trim() || isNaN(capNum) || capNum <= 0 || !Number.isInteger(capNum)) {
+    if (
+      !capacity.trim() ||
+      isNaN(capNum) ||
+      capNum <= 0 ||
+      !Number.isInteger(capNum)
+    ) {
       setCapacityError('Capacity must be a positive integer');
       isValid = false;
     }
@@ -72,20 +86,69 @@ export default function ConfigureSlotsPage() {
 
     setSubmitLoading(true);
     try {
-      await createExamSlot({
-        date,
-        time: time.trim(),
-        capacity: capNum,
-      });
-      setSuccess('Exam slot successfully created and opened for registration!');
+      if (editingSlotId) {
+        await updateExamSlot(editingSlotId, {
+          date,
+          time: time.trim(),
+          capacity: capNum,
+        });
+        setSuccess('Exam slot successfully updated!');
+      } else {
+        await createExamSlot({
+          date,
+          time: time.trim(),
+          capacity: capNum,
+        });
+        setSuccess('Exam slot successfully created and opened for registration!');
+      }
+      setEditingSlotId(null);
       setDate('');
       setTime('');
       setCapacity('1');
       await loadSlots();
     } catch (err: any) {
-      setError(err.message || 'Failed to create slot.');
+      setError(err.message || 'Failed to process slot action.');
     } finally {
       setSubmitLoading(false);
+    }
+  };
+
+  const handleStartEdit = (slot: ExamSlot) => {
+    setError(null);
+    setSuccess(null);
+    setEditingSlotId(slot.id);
+    const d = new Date(slot.date);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    setDate(`${yyyy}-${mm}-${dd}`);
+    setTime(slot.time);
+    setCapacity(String(slot.capacity));
+  };
+
+  const handleCancelEdit = () => {
+    setEditingSlotId(null);
+    setDate('');
+    setTime('');
+    setCapacity('1');
+    setDateError(null);
+    setTimeError(null);
+    setCapacityError(null);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this exam slot?')) return;
+    setError(null);
+    setSuccess(null);
+    try {
+      await deleteExamSlot(id);
+      setSuccess('Exam slot successfully deleted.');
+      if (editingSlotId === id) {
+        handleCancelEdit();
+      }
+      await loadSlots();
+    } catch (err: any) {
+      setError(err.message || 'Failed to delete slot.');
     }
   };
 
@@ -144,7 +207,9 @@ export default function ConfigureSlotsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column: Create Form */}
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl h-fit">
-          <h3 className="text-lg font-bold text-white mb-4">Create Testing Slot</h3>
+          <h3 className="text-lg font-bold text-white mb-4">
+            {editingSlotId ? 'Edit Testing Slot' : 'Create Testing Slot'}
+          </h3>
           <form onSubmit={handleSubmit} noValidate className="space-y-4">
             <div>
               <label
@@ -211,7 +276,7 @@ export default function ConfigureSlotsPage() {
               )}
             </div>
 
-            <div className="pt-2">
+            <div className="pt-2 flex flex-col gap-2">
               <button
                 type="submit"
                 disabled={submitLoading}
@@ -220,12 +285,21 @@ export default function ConfigureSlotsPage() {
                 {submitLoading ? (
                   <>
                     <div className="w-4 h-4 border-2 border-[#0B132B] border-t-transparent rounded-full animate-spin"></div>
-                    <span>Adding Slot...</span>
+                    <span>{editingSlotId ? 'Saving Changes...' : 'Adding Slot...'}</span>
                   </>
                 ) : (
-                  'Create Testing Slot'
+                  editingSlotId ? 'Save Changes' : 'Create Testing Slot'
                 )}
               </button>
+              {editingSlotId && (
+                <button
+                  type="button"
+                  onClick={handleCancelEdit}
+                  className="w-full border border-slate-700 hover:border-slate-500 bg-transparent text-slate-300 hover:text-white font-semibold py-2 px-4 rounded-lg text-sm transition-all"
+                >
+                  Cancel Edit
+                </button>
+              )}
             </div>
           </form>
         </div>
@@ -248,7 +322,7 @@ export default function ConfigureSlotsPage() {
                       scope="col"
                       className="px-6 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider"
                     >
-                      Examination Date
+                      Date
                     </th>
                     <th
                       scope="col"
@@ -260,19 +334,19 @@ export default function ConfigureSlotsPage() {
                       scope="col"
                       className="px-6 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider"
                     >
-                      Seat Capacity
+                      Capacity
                     </th>
                     <th
                       scope="col"
                       className="px-6 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider"
                     >
-                      Status
+                      Status & Bookings
                     </th>
                     <th
                       scope="col"
                       className="px-6 py-3.5 text-right text-xs font-bold text-slate-400 uppercase tracking-wider"
                     >
-                      Booked By
+                      Actions
                     </th>
                   </tr>
                 </thead>
@@ -290,35 +364,57 @@ export default function ConfigureSlotsPage() {
                     slots.map((slot) => (
                       <tr
                         key={slot.id}
-                        className="hover:bg-slate-850/30 transition-colors"
+                        className="hover:bg-slate-855/30 transition-colors"
                       >
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-white">
+                        <td className="px-6 py-4.5 whitespace-nowrap text-sm font-bold text-white">
                           {new Date(slot.date).toLocaleDateString()}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-200">
+                        <td className="px-6 py-4.5 whitespace-nowrap text-sm text-slate-200">
                           {slot.time}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
+                        <td className="px-6 py-4.5 whitespace-nowrap text-sm text-slate-400">
                           {slot.capacity} seat(s)
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {slot.isBooked ? (
-                            <span className="inline-block px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
-                              Reserved
-                            </span>
-                          ) : (
-                            <span className="inline-block px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                              Available
-                            </span>
-                          )}
+                        <td className="px-6 py-4.5 whitespace-nowrap">
+                          <div className="flex flex-col gap-1">
+                            <div>
+                              {slot.isBooked ? (
+                                <span className="inline-block px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
+                                  Reserved
+                                </span>
+                              ) : (
+                                <span className="inline-block px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                  Available
+                                </span>
+                              )}
+                            </div>
+                            {slot.isBooked && (
+                              <span className="text-[10px] text-slate-450 font-mono">
+                                ID: {slot.bookedByStudentId}
+                              </span>
+                            )}
+                          </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-xs text-slate-400">
+                        <td className="px-6 py-4.5 whitespace-nowrap text-right text-sm">
                           {slot.isBooked ? (
-                            <span className="font-mono text-slate-300">
-                              Student ID: {slot.bookedByStudentId || 'N/A'}
+                            <span className="text-xs text-slate-550 italic flex items-center justify-end gap-1.5">
+                              🔒 Locked
                             </span>
                           ) : (
-                            <span className="italic text-slate-500">—</span>
+                            <div className="flex items-center justify-end gap-3">
+                              <button
+                                onClick={() => handleStartEdit(slot)}
+                                className="text-amber-500 hover:text-amber-400 font-bold text-xs uppercase tracking-wider transition-colors"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => handleDelete(slot.id)}
+                                className="text-red-400 hover:text-red-550 font-bold text-xs uppercase tracking-wider transition-colors"
+                              >
+                                Delete
+                              </button>
+                            </div>
                           )}
                         </td>
                       </tr>
