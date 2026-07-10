@@ -3,11 +3,26 @@ import * as bcrypt from 'bcrypt';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
-// Load environmental configuration
-dotenv.config({ path: path.join(__dirname, '../.env') });
+import * as fs from 'fs';
 
-const MONGO_URI =
-  process.env.MONGO_URI || 'mongodb://localhost:27017/school-admission';
+// Manually parse .env to bypass any global shell environment variable overrides
+let MONGO_URI = 'mongodb://localhost:27017/school-admission';
+try {
+  const envPath = path.resolve(__dirname, '../.env');
+  if (fs.existsSync(envPath)) {
+    const envContent = fs.readFileSync(envPath, 'utf8');
+    const match = envContent.match(/^MONGO_URI=(.+)$/m);
+    if (match && match[1]) {
+      // Remove any surrounding quotes
+      MONGO_URI = match[1].trim().replace(/^['"]|['"]$/g, '');
+    }
+  }
+} catch (error) {
+  console.warn('Manual .env parsing failed, falling back to process.env:', error);
+  MONGO_URI = process.env.MONGO_URI || MONGO_URI;
+}
+
+console.log('Connecting to URI:', MONGO_URI);
 
 const UserSchema = new mongoose.Schema(
   {
