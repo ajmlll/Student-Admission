@@ -59,14 +59,23 @@ async function seed() {
   console.log('Connected successfully.');
 
   const adminEmail = 'admin@school.com';
-  const adminPassword = 'AdminPass123!';
+  const adminPassword = 'admin123';
   const adminName = 'Admission Admin';
 
+  const hashedPassword = await bcrypt.hash(adminPassword, 12);
   const existingAdmin = await UserModel.findOne({ email: adminEmail });
   if (existingAdmin) {
-    console.log(`User "${adminEmail}" already exists. Skipping seed.`);
+    existingAdmin.password = hashedPassword;
+    await existingAdmin.save();
+    console.log('==================================================');
+    console.log('  Database Seeding Updated Successfully (Admin)');
+    console.log('==================================================');
+    console.log(`  Name:     ${adminName}`);
+    console.log(`  Email:    ${adminEmail}`);
+    console.log(`  Password: ${adminPassword}`);
+    console.log(`  Role:     admission_team`);
+    console.log('==================================================');
   } else {
-    const hashedPassword = await bcrypt.hash(adminPassword, 12);
     const newAdmin = new UserModel({
       name: adminName,
       email: adminEmail,
