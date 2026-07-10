@@ -10,44 +10,14 @@ import {
   ExamSlot,
 } from '../../../../lib/api/examSlots';
 
-// Helper: Convert 24-hour time ("HH:MM") to 12-hour AM/PM string ("HH:MM AM/PM")
-function convert24To12(time24: string): string {
-  if (!time24) return '';
-  const [hourStr, minStr] = time24.split(':');
-  let hour = parseInt(hourStr, 10);
-  const min = minStr;
-  const ampm = hour >= 12 ? 'PM' : 'AM';
-  hour = hour % 12;
-  hour = hour ? hour : 12; // hour '0' should be '12'
-  const hourFormatted = String(hour).padStart(2, '0');
-  return `${hourFormatted}:${min} ${ampm}`;
-}
-
-// Helper: Convert 12-hour AM/PM string ("HH:MM AM/PM") to 24-hour time ("HH:MM")
-function convert12To24(time12: string): string {
-  if (!time12) return '';
-  const match = time12.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
-  if (!match) return '';
-  let [_, hourStr, minStr, ampm] = match;
-  let hour = parseInt(hourStr, 10);
-  const min = minStr;
-  ampm = ampm.toUpperCase();
-
-  if (ampm === 'PM' && hour < 12) {
-    hour += 12;
-  }
-  if (ampm === 'AM' && hour === 12) {
-    hour = 0;
-  }
-
-  const hourFormatted = String(hour).padStart(2, '0');
-  return `${hourFormatted}:${min}`;
-}
-
 export default function ConfigureSlotsPage() {
   const [slots, setSlots] = useState<ExamSlot[]>([]);
   const [date, setDate] = useState('');
-  const [time, setTime] = useState(''); // Holds 24-hour time ("HH:MM")
+  
+  // Custom 12-hour dropdown states
+  const [hour, setHour] = useState('10');
+  const [minute, setMinute] = useState('00');
+  const [ampm, setAmpm] = useState('AM');
   const [capacity, setCapacity] = useState('1');
 
   // Edit states
@@ -100,8 +70,9 @@ export default function ConfigureSlotsPage() {
       }
     }
 
-    if (!time) {
-      setTimeError('Session start time is required');
+    // Verify time selection is filled
+    if (!hour || !minute || !ampm) {
+      setTimeError('Session start time details are required');
       isValid = false;
     }
 
@@ -120,7 +91,7 @@ export default function ConfigureSlotsPage() {
 
     setSubmitLoading(true);
     try {
-      const formattedTime12 = convert24To12(time);
+      const formattedTime12 = `${hour}:${minute} ${ampm}`;
       if (editingSlotId) {
         await updateExamSlot(editingSlotId, {
           date,
@@ -138,7 +109,9 @@ export default function ConfigureSlotsPage() {
       }
       setEditingSlotId(null);
       setDate('');
-      setTime('');
+      setHour('10');
+      setMinute('00');
+      setAmpm('AM');
       setCapacity('1');
       await loadSlots();
     } catch (err: any) {
@@ -157,14 +130,27 @@ export default function ConfigureSlotsPage() {
     const mm = String(d.getMonth() + 1).padStart(2, '0');
     const dd = String(d.getDate()).padStart(2, '0');
     setDate(`${yyyy}-${mm}-${dd}`);
-    setTime(convert12To24(slot.time));
+    
+    // Parse existing 12-hour format string: "10:00 AM" or "02:30 PM"
+    const match = slot.time.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+    if (match) {
+      setHour(String(parseInt(match[1], 10)).padStart(2, '0'));
+      setMinute(match[2]);
+      setAmpm(match[3].toUpperCase());
+    } else {
+      setHour('10');
+      setMinute('00');
+      setAmpm('AM');
+    }
     setCapacity(String(slot.capacity));
   };
 
   const handleCancelEdit = () => {
     setEditingSlotId(null);
     setDate('');
-    setTime('');
+    setHour('10');
+    setMinute('00');
+    setAmpm('AM');
     setCapacity('1');
     setDateError(null);
     setTimeError(null);
@@ -268,21 +254,51 @@ export default function ConfigureSlotsPage() {
             </div>
 
             <div>
-              <label
-                htmlFor="time"
-                className="block text-xs font-semibold text-slate-400 uppercase tracking-wider"
-              >
-                Session Time
+              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                Session Time (12-Hour)
               </label>
-              <input
-                id="time"
-                type="time"
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-                className={`mt-1.5 block w-full px-3.5 py-2 bg-slate-855 border ${
-                  timeError ? 'border-red-500' : 'border-slate-800 focus:border-amber-500/50'
-                } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all sm:text-sm`}
-              />
+              <div className="mt-1.5 flex gap-2">
+                {/* Hour Select */}
+                <div className="flex-1">
+                  <select
+                    value={hour}
+                    onChange={(e) => setHour(e.target.value)}
+                    className="block w-full px-3 py-2 bg-slate-855 border border-slate-800 focus:border-amber-500/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all text-sm"
+                  >
+                    {Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0')).map((h) => (
+                      <option key={h} value={h} className="bg-slate-900">{h}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Colon Separator */}
+                <div className="flex items-center text-slate-500 font-extrabold">:</div>
+
+                {/* Minute Select */}
+                <div className="flex-1">
+                  <select
+                    value={minute}
+                    onChange={(e) => setMinute(e.target.value)}
+                    className="block w-full px-3 py-2 bg-slate-855 border border-slate-800 focus:border-amber-500/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all text-sm"
+                  >
+                    {Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0')).map((m) => (
+                      <option key={m} value={m} className="bg-slate-900">{m}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* AM/PM Select */}
+                <div className="w-20">
+                  <select
+                    value={ampm}
+                    onChange={(e) => setAmpm(e.target.value)}
+                    className="block w-full px-3 py-2 bg-slate-855 border border-slate-800 focus:border-amber-500/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all text-sm font-bold text-amber-500"
+                  >
+                    <option value="AM" className="bg-slate-900">AM</option>
+                    <option value="PM" className="bg-slate-900">PM</option>
+                  </select>
+                </div>
+              </div>
               {timeError && (
                 <p className="mt-1.5 text-xs text-red-400">{timeError}</p>
               )}
