@@ -17,11 +17,11 @@ import { AdmissionModule } from './modules/admission/admission.module';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        uri:
-          configService.get<string>('MONGO_URI') ||
-          'mongodb://localhost:27017/school-admission',
-      }),
+      useFactory: (configService: ConfigService) => {
+        const uri = configService.get<string>('MONGO_URI') || 'mongodb://localhost:27017/school-admission';
+        console.log('NestJS Mongoose connecting to URI:', uri);
+        return { uri };
+      },
     }),
     UsersModule,
     AuthModule,

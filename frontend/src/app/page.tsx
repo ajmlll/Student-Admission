@@ -19,10 +19,10 @@ export default function HomePage() {
     }
   }, [user, loading, router]);
 
-  if (loading) {
+  if (loading || user) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-950">
-        <div className="text-xl text-indigo-400 font-medium animate-pulse">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-tr from-[#0B132B] via-slate-950 to-[#1C2541]">
+        <div className="text-xl text-amber-500 font-medium animate-pulse">
           Loading portal session...
         </div>
       </div>
@@ -30,30 +30,64 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-950 text-white">
-      <main className="flex-1 flex flex-col items-center justify-center px-6 text-center">
-        <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-          School Admission Management
-        </h1>
-        <p className="mt-6 max-w-xl text-lg text-slate-400">
-          A production-ready full-stack platform for coordinating parent school
-          applications and admission team review pipelines.
-        </p>
-        <div className="mt-10 flex gap-4">
+    <div className="flex min-h-screen flex-col bg-gradient-to-tr from-[#0B132B] via-slate-950 to-[#1C2541] text-white">
+      {/* Header bar */}
+      <header className="px-6 py-5 border-b border-slate-900 flex justify-between items-center max-w-7xl w-full mx-auto">
+        <span className="text-xl font-black tracking-tight text-white flex items-center gap-2">
+          <span className="text-amber-500">🍁</span> Maplewood <span className="text-amber-500 font-normal">International</span>
+        </span>
+        <div className="flex gap-4">
           <Link
             href="/login"
-            className="rounded-lg bg-indigo-600 px-6 py-3 text-base font-medium text-white hover:bg-indigo-500 transition-colors shadow-md"
+            className="text-slate-350 hover:text-white font-semibold text-sm transition-all py-2 px-4"
           >
-            Sign In
+            Log In
           </Link>
           <Link
             href="/register"
-            className="rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-900 px-6 py-3 text-base font-medium text-slate-300 hover:text-white transition-colors"
+            className="bg-amber-500 hover:bg-amber-600 text-[#0B132B] font-bold py-2 px-4.5 rounded-lg shadow-lg shadow-amber-500/10 transition-all text-sm"
           >
-            Create Parent Account
+            Apply Now
           </Link>
         </div>
+      </header>
+
+      {/* Main hero area */}
+      <main className="flex-1 flex flex-col items-center justify-center px-6 text-center max-w-4xl mx-auto py-12">
+        <div className="space-y-6">
+          <span className="inline-block bg-amber-500/10 text-amber-500 border border-amber-500/20 px-3.5 py-1 text-xs font-bold uppercase tracking-wider rounded-full">
+            Admissions Open • Academic Year 2026/2027
+          </span>
+          <h1 className="text-5xl font-black tracking-tight sm:text-6xl text-white max-w-3xl leading-[1.15]">
+            Nurturing Excellence, <br />
+            <span className="bg-gradient-to-r from-amber-400 to-amber-550 bg-clip-text text-transparent">
+              Inspiring Leaders
+            </span>
+          </h1>
+          <p className="max-w-xl mx-auto text-base text-slate-400 leading-relaxed">
+            Welcome to Maplewood International School's Admission Portal. Apply for new student registrations, track evaluation steps, and schedule examinations.
+          </p>
+          <div className="mt-8 pt-4 flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/register"
+              className="bg-amber-500 hover:bg-amber-600 text-[#0B132B] font-bold py-3 px-8 rounded-lg shadow-xl shadow-amber-500/20 transition-all text-sm uppercase tracking-wider"
+            >
+              Start Student Application
+            </Link>
+            <Link
+              href="/login"
+              className="border border-slate-700 hover:border-slate-500 bg-transparent text-slate-300 hover:text-white font-semibold py-3 px-8 rounded-lg transition-all text-sm uppercase tracking-wider"
+            >
+              Access Portal account
+            </Link>
+          </div>
+        </div>
       </main>
+
+      {/* Footer */}
+      <footer className="py-6 border-t border-slate-900 text-center text-xs text-slate-500">
+        © 2026 Maplewood International School. All rights reserved.
+      </footer>
     </div>
   );
 }
