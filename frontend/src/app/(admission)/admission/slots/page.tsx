@@ -10,10 +10,44 @@ import {
   ExamSlot,
 } from '../../../../lib/api/examSlots';
 
+// Helper: Convert 24-hour time ("HH:MM") to 12-hour AM/PM string ("HH:MM AM/PM")
+function convert24To12(time24: string): string {
+  if (!time24) return '';
+  const [hourStr, minStr] = time24.split(':');
+  let hour = parseInt(hourStr, 10);
+  const min = minStr;
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  hour = hour % 12;
+  hour = hour ? hour : 12; // hour '0' should be '12'
+  const hourFormatted = String(hour).padStart(2, '0');
+  return `${hourFormatted}:${min} ${ampm}`;
+}
+
+// Helper: Convert 12-hour AM/PM string ("HH:MM AM/PM") to 24-hour time ("HH:MM")
+function convert12To24(time12: string): string {
+  if (!time12) return '';
+  const match = time12.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (!match) return '';
+  let [_, hourStr, minStr, ampm] = match;
+  let hour = parseInt(hourStr, 10);
+  const min = minStr;
+  ampm = ampm.toUpperCase();
+
+  if (ampm === 'PM' && hour < 12) {
+    hour += 12;
+  }
+  if (ampm === 'AM' && hour === 12) {
+    hour = 0;
+  }
+
+  const hourFormatted = String(hour).padStart(2, '0');
+  return `${hourFormatted}:${min}`;
+}
+
 export default function ConfigureSlotsPage() {
   const [slots, setSlots] = useState<ExamSlot[]>([]);
   const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
+  const [time, setTime] = useState(''); // Holds 24-hour time ("HH:MM")
   const [capacity, setCapacity] = useState('1');
 
   // Edit states
@@ -66,7 +100,7 @@ export default function ConfigureSlotsPage() {
       }
     }
 
-    if (!time.trim()) {
+    if (!time) {
       setTimeError('Session start time is required');
       isValid = false;
     }
@@ -86,17 +120,18 @@ export default function ConfigureSlotsPage() {
 
     setSubmitLoading(true);
     try {
+      const formattedTime12 = convert24To12(time);
       if (editingSlotId) {
         await updateExamSlot(editingSlotId, {
           date,
-          time: time.trim(),
+          time: formattedTime12,
           capacity: capNum,
         });
         setSuccess('Exam slot successfully updated!');
       } else {
         await createExamSlot({
           date,
-          time: time.trim(),
+          time: formattedTime12,
           capacity: capNum,
         });
         setSuccess('Exam slot successfully created and opened for registration!');
@@ -122,7 +157,7 @@ export default function ConfigureSlotsPage() {
     const mm = String(d.getMonth() + 1).padStart(2, '0');
     const dd = String(d.getDate()).padStart(2, '0');
     setDate(`${yyyy}-${mm}-${dd}`);
-    setTime(slot.time);
+    setTime(convert12To24(slot.time));
     setCapacity(String(slot.capacity));
   };
 
@@ -237,17 +272,16 @@ export default function ConfigureSlotsPage() {
                 htmlFor="time"
                 className="block text-xs font-semibold text-slate-400 uppercase tracking-wider"
               >
-                Session Time (e.g. "10:00 AM")
+                Session Time
               </label>
               <input
                 id="time"
-                type="text"
+                type="time"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
                 className={`mt-1.5 block w-full px-3.5 py-2 bg-slate-855 border ${
                   timeError ? 'border-red-500' : 'border-slate-800 focus:border-amber-500/50'
-                } rounded-lg text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all sm:text-sm`}
-                placeholder="10:00 AM"
+                } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all sm:text-sm`}
               />
               {timeError && (
                 <p className="mt-1.5 text-xs text-red-400">{timeError}</p>
