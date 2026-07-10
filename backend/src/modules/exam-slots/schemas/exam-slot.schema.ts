@@ -29,13 +29,11 @@ export class ExamSlot {
   isBooked!: boolean;
 
   @Prop({
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Student',
-    required: false,
-    default: null,
-    index: true,
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }],
+    required: true,
+    default: [],
   })
-  bookedByStudentId?: Types.ObjectId | null;
+  bookedStudentIds!: Types.ObjectId[];
 }
 
 export const ExamSlotSchema = SchemaFactory.createForClass(ExamSlot);

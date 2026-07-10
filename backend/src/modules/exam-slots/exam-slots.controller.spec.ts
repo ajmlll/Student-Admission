@@ -14,7 +14,7 @@ describe('ExamSlotsController', () => {
         id: 'slot-123',
         ...dto,
         isBooked: false,
-        bookedByStudentId: null,
+        bookedStudentIds: [],
       });
     }),
     findAll: jest
@@ -27,7 +27,7 @@ describe('ExamSlotsController', () => {
             time: '10:00 AM',
             capacity: 1,
             isBooked: showAll ? true : false,
-            bookedByStudentId: null,
+            bookedStudentIds: [],
           },
         ]);
       }),
@@ -41,7 +41,7 @@ describe('ExamSlotsController', () => {
             time: '10:00 AM',
             capacity: 1,
             isBooked: true,
-            bookedByStudentId: studentId,
+            bookedStudentIds: [studentId],
           });
         },
       ),
@@ -79,7 +79,7 @@ describe('ExamSlotsController', () => {
         id: 'slot-123',
         ...dto,
         isBooked: false,
-        bookedByStudentId: null,
+        bookedStudentIds: [],
       });
       expect(service.create).toHaveBeenCalledWith(dto);
     });
@@ -96,7 +96,7 @@ describe('ExamSlotsController', () => {
           time: '10:00 AM',
           capacity: 1,
           isBooked: false,
-          bookedByStudentId: null,
+          bookedStudentIds: [],
         },
       ]);
       expect(service.findAll).toHaveBeenCalledWith(user, false);
@@ -112,7 +112,7 @@ describe('ExamSlotsController', () => {
           time: '10:00 AM',
           capacity: 1,
           isBooked: true,
-          bookedByStudentId: null,
+          bookedStudentIds: [],
         },
       ]);
       expect(service.findAll).toHaveBeenCalledWith(user, true);
@@ -131,7 +131,7 @@ describe('ExamSlotsController', () => {
         time: '10:00 AM',
         capacity: 1,
         isBooked: true,
-        bookedByStudentId: 'student-123',
+        bookedStudentIds: ['student-123'],
       });
       expect(service.bookSlot).toHaveBeenCalledWith(
         'slot-123',

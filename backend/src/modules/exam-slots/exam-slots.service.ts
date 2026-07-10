@@ -1,3 +1,4 @@
+'use inline';
 import {
   Injectable,
   NotFoundException,
@@ -25,7 +26,7 @@ export class ExamSlotsService {
       time,
       capacity: capacity ?? 1,
       isBooked: false,
-      bookedByStudentId: null,
+      bookedStudentIds: [],
     });
     return newSlot.save();
   }
@@ -36,7 +37,7 @@ export class ExamSlotsService {
   ): Promise<ExamSlotDocument[]> {
     const query: any = {};
 
-    // For parents or default requests: only return unbooked slots
+    // For parents or default requests: only return unbooked slots (slots that have not reached capacity)
     // For staff, optionally return all slots if showAll is true
     if (currentUser.role !== 'admission_team' || !showAll) {
       query.isBooked = false;
@@ -56,8 +57,8 @@ export class ExamSlotsService {
       throw new NotFoundException(`Exam slot with ID "${slotId}" not found`);
     }
 
-    if (slot.isBooked) {
-      throw new BadRequestException('This exam slot is already booked');
+    if (slot.isBooked || slot.bookedStudentIds.length >= slot.capacity) {
+      throw new BadRequestException('This exam slot is already fully booked');
     }
 
     // 2. Find student (this naturally validates parent ownership and existence)
@@ -80,13 +81,15 @@ export class ExamSlotsService {
       }
     }
 
-    // 4. Update the slot atomically using query locking to prevent double booking
+    // 4. Update the slot atomically using query locking to prevent double booking beyond capacity
     const updatedSlot = await this.examSlotModel
       .findOneAndUpdate(
-        { _id: slotId, isBooked: false },
         {
-          isBooked: true,
-          bookedByStudentId: new Types.ObjectId(studentId),
+          _id: slotId,
+          isBooked: false,
+        },
+        {
+          $push: { bookedStudentIds: new Types.ObjectId(studentId) },
         },
         { new: true },
       )
@@ -98,6 +101,12 @@ export class ExamSlotsService {
       );
     }
 
+    // Set isBooked = true if capacity is reached
+    if (updatedSlot.bookedStudentIds.length >= updatedSlot.capacity) {
+      updatedSlot.isBooked = true;
+      await updatedSlot.save();
+    }
+
     // 5. Update the student profile
     try {
       student.status = 'SLOT_BOOKED';
@@ -107,13 +116,13 @@ export class ExamSlotsService {
       };
       await student.save();
     } catch (error) {
-      // ROLLBACK: Reset slot state to prevent inconsistency if saving student fails
+      // ROLLBACK: Remove student from slot array and reset isBooked state
       await this.examSlotModel
         .updateOne(
           { _id: slotId },
           {
+            $pull: { bookedStudentIds: new Types.ObjectId(studentId) },
             isBooked: false,
-            bookedByStudentId: null,
           },
         )
         .exec();
@@ -129,7 +138,7 @@ export class ExamSlotsService {
     if (!slot) {
       throw new NotFoundException(`Exam slot with ID "${id}" not found`);
     }
-    if (slot.isBooked) {
+    if (slot.bookedStudentIds.length > 0) {
       throw new BadRequestException(
         'Cannot delete a slot that has already been booked by a student.',
       );
@@ -145,7 +154,7 @@ export class ExamSlotsService {
     if (!slot) {
       throw new NotFoundException(`Exam slot with ID "${id}" not found`);
     }
-    if (slot.isBooked) {
+    if (slot.bookedStudentIds.length > 0) {
       throw new BadRequestException(
         'Cannot edit a slot that has already been booked by a student.',
       );

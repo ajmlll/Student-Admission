@@ -42,10 +42,10 @@ const ExamSlotSchema = new mongoose.Schema(
     time: { type: String, required: true },
     capacity: { type: Number, required: true, default: 1 },
     isBooked: { type: Boolean, required: true, default: false },
-    bookedByStudentId: {
-      type: mongoose.Schema.Types.ObjectId,
+    bookedStudentIds: {
+      type: [mongoose.Schema.Types.ObjectId],
       ref: 'Student',
-      default: null,
+      default: [],
     },
   },
   { timestamps: true },
@@ -107,7 +107,7 @@ async function seed() {
         time: slot.time,
         capacity: 1,
         isBooked: false,
-        bookedByStudentId: null,
+        bookedStudentIds: [],
       });
       await newSlot.save();
       console.log(

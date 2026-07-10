@@ -4,7 +4,7 @@ export interface ExamSlot {
   time: string;
   capacity: number;
   isBooked: boolean;
-  bookedByStudentId?: string | null;
+  bookedStudentIds?: string[];
   createdAt: string;
   updatedAt: string;
 }

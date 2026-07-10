@@ -430,7 +430,11 @@ export default function ConfigureSlotsPage() {
                             <div>
                               {slot.isBooked ? (
                                 <span className="inline-block px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
-                                  Reserved
+                                  Fully Booked
+                                </span>
+                              ) : (slot.bookedStudentIds?.length || 0) > 0 ? (
+                                <span className="inline-block px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                  Partially Booked
                                 </span>
                               ) : (
                                 <span className="inline-block px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
@@ -438,10 +442,16 @@ export default function ConfigureSlotsPage() {
                                 </span>
                               )}
                             </div>
-                            {slot.isBooked && (
-                              <span className="text-[10px] text-slate-450 font-mono">
-                                ID: {slot.bookedByStudentId}
-                              </span>
+                            <span className="text-[10px] text-slate-400 block mt-1">
+                              {(slot.bookedStudentIds?.length || 0)} / {slot.capacity} Booked
+                            </span>
+                            {(slot.bookedStudentIds || []).length > 0 && (
+                              <div className="text-[9px] text-slate-500 flex flex-col mt-1 leading-tight font-mono">
+                                <span className="font-bold text-slate-400">Student IDs:</span>
+                                {(slot.bookedStudentIds || []).map((id) => (
+                                  <span key={id}>{id}</span>
+                                ))}
+                              </div>
                             )}
                           </div>
                         </td>
