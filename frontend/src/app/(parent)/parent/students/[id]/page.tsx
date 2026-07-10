@@ -227,11 +227,12 @@ export default function StudentDetailsPage() {
         <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-6">
           Application Progress Tracker
         </h3>
-        <div className="relative flex justify-between items-center w-full">
-          {/* Connecting lines */}
-          <div className="absolute left-4 right-4 top-[18px] h-[3px] bg-slate-800 -z-10 rounded">
-            <div
-              className="h-full bg-amber-500 rounded transition-all duration-500"
+        <div className="overflow-x-auto pb-2 scrollbar-none select-none">
+          <div className="relative flex justify-between items-center w-full min-w-[500px]">
+            {/* Connecting lines */}
+            <div className="absolute left-4 right-4 top-[18px] h-[3px] bg-slate-800 -z-10 rounded">
+              <div
+                className="h-full bg-amber-500 rounded transition-all duration-500"
               style={{
                 width: `${(currentStepIdx / (STATUS_STEPS.length - 1)) * 100}%`,
               }}
@@ -285,6 +286,7 @@ export default function StudentDetailsPage() {
               </div>
             );
           })}
+          </div>
         </div>
       </div>
 

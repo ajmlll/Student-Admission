@@ -294,8 +294,8 @@ export default function ParentDashboard() {
                 </div>
 
                 {/* 2. Middle Section: Stepper Progress */}
-                <div className="px-2">
-                  <div className="relative flex justify-between items-center w-full">
+                <div className="px-2 overflow-x-auto pb-2 scrollbar-none select-none">
+                  <div className="relative flex justify-between items-center w-full min-w-[500px]">
                     {/* Connecting Line */}
                     <div className="absolute left-4 right-4 top-[14px] h-[3px] bg-slate-800/60 -z-10 rounded">
                       <div

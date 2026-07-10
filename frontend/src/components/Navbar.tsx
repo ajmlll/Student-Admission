@@ -39,9 +39,9 @@ export default function Navbar() {
           <span className="text-[9px] font-bold tracking-widest text-amber-500 uppercase mt-0.5">International School</span>
         </span>
       </Link>
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-2.5 sm:space-x-4">
         {/* Glowing/Shining User Profile Container */}
-        <div className="flex items-center gap-3 bg-gradient-to-r from-slate-900/60 to-slate-800/60 border border-slate-700/50 hover:border-amber-500/40 rounded-full px-4.5 py-1.5 shadow-md shadow-amber-500/5 hover:shadow-amber-500/10 transition-all duration-300 group">
+        <div className="flex items-center gap-2 bg-gradient-to-r from-slate-900/60 to-slate-800/60 border border-slate-700/50 hover:border-amber-500/40 rounded-full p-1 sm:px-4 sm:py-1.5 shadow-md shadow-amber-500/5 hover:shadow-amber-500/10 transition-all duration-300 group">
           {/* User/Contact Icon wrapper */}
           <div className="bg-amber-500/10 border border-amber-500/20 p-1.5 rounded-full group-hover:bg-amber-500/20 transition-all duration-300">
             <svg
@@ -58,7 +58,7 @@ export default function Navbar() {
               />
             </svg>
           </div>
-          <div className="flex flex-col text-left">
+          <div className="hidden sm:flex flex-col text-left">
             <span className="text-xs font-bold text-slate-100 group-hover:text-white transition-colors leading-tight">
               {user.name}
             </span>
@@ -71,9 +71,23 @@ export default function Navbar() {
         {/* Logout Trigger */}
         <button
           onClick={logout}
-          className="border border-red-500/20 hover:border-red-500/40 bg-red-500/5 hover:bg-red-500/10 text-red-400 font-bold text-xs uppercase tracking-wider transition-all py-2 px-4.5 rounded-full"
+          className="border border-red-500/20 hover:border-red-500/40 bg-red-500/5 hover:bg-red-500/10 text-red-400 font-bold text-xs uppercase tracking-wider transition-all p-2 sm:py-2.5 sm:px-4.5 rounded-full flex items-center justify-center gap-1.5"
+          title="Logout"
         >
-          Logout
+          <svg
+            className="w-4 h-4 sm:hidden text-red-400"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.5}
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M5.636 5.636a9 9 0 1012.728 0M12 3v9"
+            />
+          </svg>
+          <span className="hidden sm:inline">Logout</span>
         </button>
       </div>
     </nav>
