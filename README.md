@@ -99,3 +99,13 @@ Student-Admission/
 2. **Staff Login (Admission Team)**: Use the seeded credentials (`admin@school.com` / `AdminPass123!`) to sign in as the admission team role.
 3. **Session Security**: The JWT token returned by the backend is stored in an HTTP-only cookie set by local Next.js Route Handlers.
 4. **Access Control**: Role-based access control is implemented inside the Edge `middleware.ts` to redirect unauthenticated or unauthorized requests.
+
+---
+
+## Architecture Decisions & Workflow Integrity
+
+- **Feature-Based NestJS Modularity**: Code is structured into isolated domain modules under `backend/src/modules/` (such as `auth`, `users`, `students`, `exam-slots`, and `admission`). Each module self-contains its controller routes, business services, schemas, and class-validation DTOs, promoting low-coupling and separation of concerns.
+- **Server-Side Status Enforcements**: Workflow transitions (`APPLICATION_CREATED` → `REGISTRATION_FEE_PAID` → `SLOT_BOOKED` → `EXAM_COMPLETED` → `ADMISSION_COMPLETED`) are strictly validated inside NestJS service rules rather than trusting client-side logic. Any request to transition a student application out of order is blocked with clear `400 Bad Request` or `403 Forbidden` API exceptions, protecting data sanity.
+- **Access Control & Parent Data Isolation**: Enforced globally using custom `@Roles()` controllers and `RolesGuard`. Parent mutating endpoints dynamically load and assert student ownership (matching `student.parentId` with the authenticated JWT session ID), preventing unauthorized users from accessing or editing another parent's child records.
+- **Race Condition Prevention & Booking Rollback**: Slot reservations are booked using atomic query filters (`isBooked: false`) to avoid double booking. In case student status updates fail after a slot has been reserved, a manual database rollback reverts the slot's booking state, preserving database consistency without requiring replica-set transaction configurations.
+
