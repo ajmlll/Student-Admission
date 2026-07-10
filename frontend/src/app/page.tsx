@@ -111,7 +111,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
             {[
               { step: '01', title: 'Register Account', desc: 'Create a parent profile account to begin the enrollment process.', icon: '🔑' },
               { step: '02', title: 'Biographical Info', desc: 'Provide student name, age, previous school records, and grades.', icon: '📝' },
@@ -121,19 +121,19 @@ export default function HomePage() {
             ].map((item) => (
               <div
                 key={item.step}
-                className="bg-slate-900/40 border border-slate-800/80 p-6 rounded-2xl flex flex-col justify-between shadow-lg space-y-4 hover:border-amber-500/30 transition-all duration-300 group h-full"
+                className="bg-slate-900/40 border border-slate-800/80 p-6 lg:p-8 lg:py-12 rounded-2xl flex flex-col justify-between shadow-lg hover:border-amber-500/30 hover:-translate-y-2 hover:shadow-xl hover:shadow-amber-500/5 transition-all duration-300 group h-full"
               >
-                <div className="space-y-3">
+                <div className="space-y-4 lg:space-y-6">
                   <div className="flex justify-between items-start">
-                    <span className="text-3xl">{item.icon}</span>
-                    <span className="text-xs font-bold text-amber-500/80 tracking-widest bg-amber-500/5 border border-amber-500/10 px-2 py-0.5 rounded-full uppercase leading-none">
+                    <span className="text-3xl lg:text-4xl">{item.icon}</span>
+                    <span className="text-xs lg:text-sm font-bold text-amber-500/80 tracking-widest bg-amber-500/5 border border-amber-500/10 px-2.5 py-1 rounded-full uppercase leading-none">
                       Step {item.step}
                     </span>
                   </div>
-                  <h3 className="text-base font-bold text-white leading-snug group-hover:text-amber-500 transition-colors">
+                  <h3 className="text-base lg:text-xl font-extrabold text-white leading-snug group-hover:text-amber-500 transition-colors">
                     {item.title}
                   </h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
+                  <p className="text-xs lg:text-sm text-slate-400 leading-relaxed">
                     {item.desc}
                   </p>
                 </div>
