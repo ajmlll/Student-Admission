@@ -39,6 +39,9 @@ export default function ParentDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Status Filter State
+  const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
+
   useEffect(() => {
     async function loadData() {
       try {
@@ -67,6 +70,29 @@ export default function ParentDashboard() {
     );
   }
 
+  // Count Calculations
+  const totalCount = students.length;
+  const appliedCount = students.filter(
+    (s) => s.status === 'APPLICATION_CREATED',
+  ).length;
+  const feePaidCount = students.filter(
+    (s) => s.status === 'REGISTRATION_FEE_PAID',
+  ).length;
+  const slotBookedCount = students.filter(
+    (s) => s.status === 'SLOT_BOOKED',
+  ).length;
+  const examCompletedCount = students.filter(
+    (s) => s.status === 'EXAM_COMPLETED',
+  ).length;
+  const admittedCount = students.filter(
+    (s) => s.status === 'ADMISSION_COMPLETED',
+  ).length;
+
+  // Filter application list
+  const filteredStudents = selectedFilter
+    ? students.filter((s) => s.status === selectedFilter)
+    : students;
+
   return (
     <main className="max-w-7xl w-full mx-auto px-6 py-8 animate-fade-in space-y-8">
       {/* Dashboard Welcome Header */}
@@ -93,6 +119,111 @@ export default function ParentDashboard() {
         </div>
       )}
 
+      {/* Metrics & Filter Cards */}
+      {students.length > 0 && (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {/* Metric Card: All */}
+          <button
+            onClick={() => setSelectedFilter(null)}
+            className={`p-4 rounded-xl border text-left transition-all relative overflow-hidden group ${
+              selectedFilter === null
+                ? 'bg-slate-900 border-amber-500 shadow-md shadow-amber-500/5'
+                : 'bg-[#0f172a]/30 border-slate-800 hover:border-slate-700/80'
+            }`}
+          >
+            <div className="text-2xl font-black text-white">{totalCount}</div>
+            <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mt-1">
+              All Applications
+            </div>
+          </button>
+
+          {/* Metric Card: Applied */}
+          <button
+            onClick={() => setSelectedFilter('APPLICATION_CREATED')}
+            className={`p-4 rounded-xl border text-left transition-all relative overflow-hidden group ${
+              selectedFilter === 'APPLICATION_CREATED'
+                ? 'bg-slate-900 border-amber-500 shadow-md shadow-amber-500/5'
+                : 'bg-[#0f172a]/30 border-slate-800 hover:border-slate-700/80'
+            }`}
+          >
+            <div className="text-2xl font-black text-white">{appliedCount}</div>
+            <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mt-1">
+              Applied
+            </div>
+            {appliedCount > 0 && selectedFilter !== 'APPLICATION_CREATED' && (
+              <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-amber-500" />
+            )}
+          </button>
+
+          {/* Metric Card: Fee Paid */}
+          <button
+            onClick={() => setSelectedFilter('REGISTRATION_FEE_PAID')}
+            className={`p-4 rounded-xl border text-left transition-all relative overflow-hidden group ${
+              selectedFilter === 'REGISTRATION_FEE_PAID'
+                ? 'bg-slate-900 border-amber-500 shadow-md shadow-amber-500/5'
+                : 'bg-[#0f172a]/30 border-slate-800 hover:border-slate-700/80'
+            }`}
+          >
+            <div className="text-2xl font-black text-white">{feePaidCount}</div>
+            <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mt-1">
+              Fee Paid
+            </div>
+            {feePaidCount > 0 && selectedFilter !== 'REGISTRATION_FEE_PAID' && (
+              <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-amber-500" />
+            )}
+          </button>
+
+          {/* Metric Card: Slot Booked */}
+          <button
+            onClick={() => setSelectedFilter('SLOT_BOOKED')}
+            className={`p-4 rounded-xl border text-left transition-all relative overflow-hidden group ${
+              selectedFilter === 'SLOT_BOOKED'
+                ? 'bg-slate-900 border-amber-500 shadow-md shadow-amber-500/5'
+                : 'bg-[#0f172a]/30 border-slate-800 hover:border-slate-700/80'
+            }`}
+          >
+            <div className="text-2xl font-black text-white">{slotBookedCount}</div>
+            <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mt-1">
+              Slot Booked
+            </div>
+          </button>
+
+          {/* Metric Card: Exam Finished */}
+          <button
+            onClick={() => setSelectedFilter('EXAM_COMPLETED')}
+            className={`p-4 rounded-xl border text-left transition-all relative overflow-hidden group ${
+              selectedFilter === 'EXAM_COMPLETED'
+                ? 'bg-slate-900 border-amber-500 shadow-md shadow-amber-500/5'
+                : 'bg-[#0f172a]/30 border-slate-800 hover:border-slate-700/80'
+            }`}
+          >
+            <div className="text-2xl font-black text-white">
+              {examCompletedCount}
+            </div>
+            <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mt-1">
+              Exam Finished
+            </div>
+          </button>
+
+          {/* Metric Card: Admitted */}
+          <button
+            onClick={() => setSelectedFilter('ADMISSION_COMPLETED')}
+            className={`p-4 rounded-xl border text-left transition-all relative overflow-hidden group ${
+              selectedFilter === 'ADMISSION_COMPLETED'
+                ? 'bg-slate-900 border-emerald-500 shadow-md shadow-emerald-500/5'
+                : 'bg-[#0f172a]/30 border-slate-800 hover:border-slate-700/80'
+            }`}
+          >
+            <div className="text-2xl font-black text-emerald-400">
+              {admittedCount}
+            </div>
+            <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mt-1">
+              Admitted
+            </div>
+          </button>
+        </div>
+      )}
+
       {students.length === 0 ? (
         <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-16 text-center shadow-lg max-w-2xl mx-auto">
           <div className="text-5xl mb-4">🏫</div>
@@ -107,9 +238,13 @@ export default function ParentDashboard() {
             Create First Application
           </Link>
         </div>
+      ) : filteredStudents.length === 0 ? (
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-12 text-center text-slate-400 text-sm animate-fade-in shadow-xl">
+          No applications match the selected status filter.
+        </div>
       ) : (
         <div className="grid grid-cols-1 gap-8">
-          {students.map((student) => {
+          {filteredStudents.map((student) => {
             const currentStepIdx = getStatusIndex(student.status);
             const initials = getInitials(student.studentName);
 

@@ -33,13 +33,30 @@ export default function HomePage() {
     <div className="flex min-h-screen flex-col bg-gradient-to-tr from-[#0B132B] via-slate-950 to-[#1C2541] text-white">
       {/* Header bar */}
       <header className="px-6 py-5 border-b border-slate-900 flex justify-between items-center max-w-7xl w-full mx-auto">
-        <span className="text-xl font-black tracking-tight text-white flex items-center gap-2.5">
-          <span className="text-amber-500 text-2xl font-serif">A</span>
+        <div className="flex items-center gap-3">
+          <svg
+            className="w-9 h-9 text-amber-500"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 8c0.5-1.5 2-2.5 4.5-2.5H19v7h-2.5c-2.5 0-4 1-4.5 2.5m0-7c-.5-1.5-2-2.5-4.5-2.5H5v7h2.5c2.5 0 4 1 4.5 2.5m0-7v7"
+            />
+          </svg>
           <span className="flex flex-col leading-none text-left">
             <span className="text-base font-black tracking-wide text-white uppercase">ABC</span>
             <span className="text-[9px] font-bold tracking-widest text-amber-500 uppercase mt-0.5">International School</span>
           </span>
-        </span>
+        </div>
         <div className="flex gap-4">
           <Link
             href="/login"
