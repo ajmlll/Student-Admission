@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -116,5 +117,28 @@ export class StudentsService {
       }
       return this.studentModel.find(query).exec();
     }
+  }
+
+  async payFee(id: string, currentUser: any): Promise<StudentDocument> {
+    const student = await this.studentModel.findById(id).exec();
+    if (!student) {
+      throw new NotFoundException(`Student application with ID "${id}" not found`);
+    }
+
+    this.checkAccess(student, currentUser);
+
+    if (student.status !== 'APPLICATION_CREATED') {
+      throw new BadRequestException(
+        `Cannot pay registration fee. Student application status is "${student.status}" instead of "APPLICATION_CREATED".`,
+      );
+    }
+
+    student.registrationFee = {
+      paid: true,
+      paidAt: new Date(),
+    };
+    student.status = 'REGISTRATION_FEE_PAID';
+
+    return student.save();
   }
 }

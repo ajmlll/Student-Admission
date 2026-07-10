@@ -120,4 +120,28 @@ export class StudentsController {
   ) {
     return this.studentsService.findAll(user, statusFilter);
   }
+
+  @Post(':id/pay-fee')
+  @Roles('parent')
+  @ApiOperation({
+    summary:
+      'Pay registration fee for a student application (Mock payment, Parent only)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Registration fee paid successfully.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Application not in APPLICATION_CREATED state.',
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized access token.' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - parent does not own student.',
+  })
+  @ApiResponse({ status: 404, description: 'Student profile not found.' })
+  async payFee(@Param('id') id: string, @CurrentUser() user: any) {
+    return this.studentsService.payFee(id, user);
+  }
 }
