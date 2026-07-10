@@ -9,11 +9,45 @@ export default function RegisterPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setNameError(null);
+    setEmailError(null);
+    setPasswordError(null);
+
+    let isValid = true;
+
+    // Client-side validations
+    if (!name.trim()) {
+      setNameError('Full name is required');
+      isValid = false;
+    }
+
+    if (!email) {
+      setEmailError('Email address is required');
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      setEmailError('Please enter a valid email address');
+      isValid = false;
+    }
+
+    if (!password) {
+      setPasswordError('Password is required');
+      isValid = false;
+    } else if (password.length < 6) {
+      setPasswordError('Password must be at least 6 characters');
+      isValid = false;
+    }
+
+    if (!isValid) return;
+
     try {
       await register(name, email, password);
     } catch (err: any) {
@@ -45,7 +79,7 @@ export default function RegisterPage() {
           </div>
         )}
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit} noValidate>
           <div className="space-y-4 rounded-md shadow-sm">
             <div>
               <label
@@ -58,13 +92,16 @@ export default function RegisterPage() {
                 id="name"
                 name="name"
                 type="text"
-                autoComplete="name"
-                required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all sm:text-sm"
+                className={`mt-1 block w-full px-3 py-2 bg-slate-800 border ${
+                  nameError ? 'border-red-500' : 'border-slate-700'
+                } rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all sm:text-sm`}
                 placeholder="John Doe"
               />
+              {nameError && (
+                <p className="mt-1 text-xs text-red-400">{nameError}</p>
+              )}
             </div>
             <div>
               <label
@@ -77,13 +114,16 @@ export default function RegisterPage() {
                 id="email-address"
                 name="email"
                 type="email"
-                autoComplete="email"
-                required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all sm:text-sm"
+                className={`mt-1 block w-full px-3 py-2 bg-slate-800 border ${
+                  emailError ? 'border-red-500' : 'border-slate-700'
+                } rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all sm:text-sm`}
                 placeholder="you@example.com"
               />
+              {emailError && (
+                <p className="mt-1 text-xs text-red-400">{emailError}</p>
+              )}
             </div>
             <div>
               <label
@@ -96,13 +136,16 @@ export default function RegisterPage() {
                 id="password"
                 name="password"
                 type="password"
-                required
-                minLength={6}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all sm:text-sm"
+                className={`mt-1 block w-full px-3 py-2 bg-slate-800 border ${
+                  passwordError ? 'border-red-500' : 'border-slate-700'
+                } rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all sm:text-sm`}
                 placeholder="Min 6 characters"
               />
+              {passwordError && (
+                <p className="mt-1 text-xs text-red-400">{passwordError}</p>
+              )}
             </div>
           </div>
 
