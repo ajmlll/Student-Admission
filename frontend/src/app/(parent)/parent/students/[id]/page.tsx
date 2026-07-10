@@ -335,9 +335,9 @@ export default function StudentDetailsPage() {
                   onChange={(e) => setEditGender(e.target.value as any)}
                   className="mt-1 block w-full px-2.5 py-1.5 bg-slate-800 border border-slate-700 rounded text-sm text-white"
                 >
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
+                  <option value="male" className="bg-slate-900 text-white">Male</option>
+                  <option value="female" className="bg-slate-900 text-white">Female</option>
+                  <option value="other" className="bg-slate-900 text-white">Other</option>
                 </select>
               </div>
               <div>
@@ -356,10 +356,10 @@ export default function StudentDetailsPage() {
                   onChange={(e) => setEditGrade(e.target.value as any)}
                   className="mt-1 block w-full px-2.5 py-1.5 bg-slate-800 border border-slate-700 rounded text-sm text-white"
                 >
-                  <option value="Grade 1">Grade 1</option>
-                  <option value="Grade 2">Grade 2</option>
-                  <option value="Grade 3">Grade 3</option>
-                  <option value="Grade 4">Grade 4</option>
+                  <option value="Grade 1" className="bg-slate-900 text-white">Grade 1</option>
+                  <option value="Grade 2" className="bg-slate-900 text-white">Grade 2</option>
+                  <option value="Grade 3" className="bg-slate-900 text-white">Grade 3</option>
+                  <option value="Grade 4" className="bg-slate-900 text-white">Grade 4</option>
                 </select>
               </div>
               <div className="flex justify-end gap-2 pt-2">
