@@ -181,12 +181,12 @@ export default function NewStudentPage() {
                     genderError ? 'border-red-500' : 'border-slate-800 focus:border-amber-500/50'
                   } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all sm:text-sm`}
                 >
-                  <option value="" disabled className="text-slate-500">
+                  <option value="" disabled className="bg-slate-900 text-slate-500">
                     Select gender
                   </option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
+                  <option value="male" className="bg-slate-900 text-white">Male</option>
+                  <option value="female" className="bg-slate-900 text-white">Female</option>
+                  <option value="other" className="bg-slate-900 text-white">Other</option>
                 </select>
                 {genderError && (
                   <p className="mt-1.5 text-xs text-red-400">{genderError}</p>
@@ -229,13 +229,13 @@ export default function NewStudentPage() {
                   gradeError ? 'border-red-500' : 'border-slate-800 focus:border-amber-500/50'
                 } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all sm:text-sm`}
               >
-                <option value="" disabled className="text-slate-500">
+                <option value="" disabled className="bg-slate-900 text-slate-500">
                   Select grade
                 </option>
-                <option value="Grade 1">Grade 1</option>
-                <option value="Grade 2">Grade 2</option>
-                <option value="Grade 3">Grade 3</option>
-                <option value="Grade 4">Grade 4</option>
+                <option value="Grade 1" className="bg-slate-900 text-white">Grade 1</option>
+                <option value="Grade 2" className="bg-slate-900 text-white">Grade 2</option>
+                <option value="Grade 3" className="bg-slate-900 text-white">Grade 3</option>
+                <option value="Grade 4" className="bg-slate-900 text-white">Grade 4</option>
               </select>
               {gradeError && (
                 <p className="mt-1.5 text-xs text-red-400">{gradeError}</p>
