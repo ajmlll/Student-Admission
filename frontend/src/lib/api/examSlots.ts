@@ -34,3 +34,20 @@ export async function bookExamSlot(
   }
   return res.json();
 }
+
+export async function createExamSlot(input: {
+  date: string;
+  time: string;
+  capacity?: number;
+}): Promise<ExamSlot> {
+  const res = await fetch('/api/proxy/exam-slots', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.message?.[0] || err.message || 'Failed to create exam slot');
+  }
+  return res.json();
+}
